@@ -30,6 +30,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: true
+      - name: Test data validation code
+        run: python3 -m unittest discover -s ai-observatory/tests -v
       - name: Refresh external data (daily and manual only)
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: python3 ai-observatory/scripts/update_epoch.py
