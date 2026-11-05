@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080c18">
+  <meta name="description" content="Source-grounded monitoring of frontier AI capabilities, autonomy, recursive self-improvement and safety evidence.">
+  <title>FRONTIER — AI Observatory</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <div class="brand"><div class="brandmark"><span></span><span></span><span></span><span></span></div><div><b>FRONTIER<span class="branddot">.</span></b><small>AI OBSERVATORY</small></div></div>
+      <div class="side-caption">INTELLIGENCE</div>
+      <nav class="nav" aria-label="Dashboard views">
+        <button class="nav-item active" type="button" data-view="overview"><span class="nav-icon">◈</span> Executive overview</button>
+        <button class="nav-item" type="button" data-view="capabilities"><span class="nav-icon">▥</span> Capabilities & velocity</button>
+        <button class="nav-item" type="button" data-view="autonomy"><span class="nav-icon">⌘</span> Autonomy & RSI</button>
+        <button class="nav-item" type="button" data-view="safety"><span class="nav-icon">◇</span> Safety & control</button>
+        <button class="nav-item" type="button" data-view="scenarios"><span class="nav-icon">↗</span> Scenarios & sources</button>
+      </nav>
+      <div class="side-spacer"></div>
+      <div class="sidebar-note"><div class="note-dot"></div><div><strong>Evidence over speculation</strong><p>No invented risk scores. Every plotted observation needs provenance.</p></div></div>
+      <a class="repo-link" href="https://github.com/jmed001/Websites/tree/main/ai-observatory" target="_blank" rel="noopener noreferrer">Open source repository ↗</a>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <button class="mobile-menu" id="menuBtn" type="button" aria-label="Toggle navigation">☰</button>
+        <div class="breadcrumbs">RESEARCH INTELLIGENCE <span>/</span> <b id="crumb">Executive overview</b></div>
+        <div class="top-actions"><span class="status" id="dataStatus">LOADING DATA</span><button type="button" class="icon-btn" id="reloadBtn" title="Reload published data" aria-label="Reload data">↻</button><a class="top-doc" href="https://epoch.ai/eci" rel="noopener noreferrer" target="_blank">Methodology ↗</a></div>
+      </header>
+      <main class="main" id="main">
+        <section class="section-title">
+          <div><div class="eyebrow" id="eyebrow">AI EVOLUTION / INTELLIGENCE BRIEF</div><h1 id="pageTitle">Understanding the frontier</h1><p id="pageSub">What is observable, what is changing, and what remains unknown.</p></div>
+          <div class="asof"><span>DATA AS OF</span><strong id="asof">—</strong><small>Publisher cadence varies</small></div>
+        </section>
+        <div class="notice" id="globalNotice" hidden></div>
+        <section class="view active" id="view-overview" aria-label="Executive overview">
+          <div class="metrics">
+            <div class="metric"><div class="metric-label">Leading ECI capability estimate <span>↗</span></div><strong id="topEci">—</strong><small>Epoch composite scale, not an IQ or risk score</small></div>
+            <div class="metric"><div class="metric-label">Models in current snapshot <span>▥</span></div><strong id="modelCount">—</strong><small>Visible curated comparison set</small></div>
+            <div class="metric amber"><div class="metric-label">METR autonomy dataset <span>◷</span></div><strong class="short" id="metrState">—</strong><small id="metrDate">Historical evaluation archive</small></div>
+            <div class="metric purple"><div class="metric-label">Safety evidence entries <span>◇</span></div><strong id="evidenceCount">—</strong><small>Curated examples, not total incident count</small></div>
+          </div>
+          <div class="grid-two">
+            <div class="panel panel-big"><div class="panel-head"><div><div class="panel-overline">CAPABILITY FRONTIER</div><h2>Leading models compared</h2></div><span class="panel-tag">90% credible intervals</span></div><div class="chart-wrap"><canvas id="leadChart" role="img" aria-label="Leading model ECI comparison"></canvas></div><div class="footnote">Epoch ECI is an abstract capability estimate, not a probability of dangerous behavior. <a href="https://epoch.ai/eci" target="_blank" rel="noopener noreferrer">Source ↗</a></div></div>
+            <div class="stack">
+              <div class="panel"><div class="panel-head"><div><div class="panel-overline">TREND INTEGRITY</div><h2>Is progress accelerating?</h2></div></div><div id="trendSummary" class="empty-state">Loading release-date observations…</div><div class="footnote">Velocity requires a consistent method and genuine model release dates, not daily re-scraped rankings.</div></div>
+              <div class="panel"><div class="panel-head"><div><div class="panel-overline">EVENT STREAM</div><h2>Recent evidence</h2></div></div><div id="recentEvidence" class="mini-events"></div></div>
+            </div>
+          </div>
+          <div class="panel slim"><div class="panel-head"><div><div class="panel-overline">MEASUREMENT DISCIPLINE</div><h2>Three separate questions, three evidence streams</h2></div></div><div class="three-points"><div><b>01 / CAPABILITY</b><p>Benchmark evidence tracks what AI systems accomplish.</p></div><div><b>02 / AUTONOMY & RSI</b><p>Research tracks independent task execution and AI-assisted AI improvement.</p></div><div><b>03 / CONTROL</b><p>Evaluations and documented incidents track safety failures and safeguards.</p></div></div></div>
+        </section>
+        <section class="view" id="view-capabilities" aria-label="Capabilities and acceleration">
+          <div class="metrics compact"><div class="metric"><div class="metric-label">Highest observed ECI</div><strong id="capTop">—</strong><small>Current snapshot only</small></div><div class="metric"><div class="metric-label">ECI methodology changed</div><strong class="date-large">Nov 4</strong><small>2026 Bayesian method revision</small></div><div class="metric"><div class="metric-label">Historical comparability</div><strong class="short">Conditional</strong><small>Revisions must be accounted for</small></div></div>
+          <div class="panel"><div class="panel-head"><div><div class="panel-overline">FRONTIER COMPARISON</div><h2>Epoch Capabilities Index</h2></div><button class="outline-btn" id="exportBtn" type="button">Export model CSV ↓</button></div><div class="controls"><label>Developer <select id="labFilter"><option value="all">All developers</option></select></label><label>Sort <select id="sortFilter"><option value="desc">Highest ECI first</option><option value="asc">Lowest ECI first</option><option value="model">Model name</option></select></label><label class="search-label">Search <input id="modelSearch" type="search" placeholder="Find a model…"></label></div><div class="chart-wrap chart-wide"><canvas id="capChart" role="img" aria-label="ECI scores by model"></canvas></div><div class="table-wrap"><table class="data-table"><thead><tr><th>MODEL</th><th>DEVELOPER</th><th>ECI</th><th>90% CREDIBLE INTERVAL</th></tr></thead><tbody id="modelRows"></tbody></table></div><div class="footnote">These model scores may be revised when Epoch re-estimates all capabilities. The sample is not comprehensive. <a href="https://epoch.ai/data/eci-documentation" target="_blank" rel="noopener noreferrer">Methodology ↗</a></div></div>
+          <div class="panel"><div class="panel-head"><div><div class="panel-overline">HISTORICAL GROWTH</div><h2>Model-release capability timeline</h2></div><span class="panel-tag">Source dates required</span></div><div id="historyEmpty" class="empty-state">Historical release-date dataset not connected yet. No interpolated points will be shown.</div><div class="chart-wrap" id="historyCanvasWrap" hidden><canvas id="historyChart" role="img" aria-label="ECI by model release date"></canvas></div></div>
+        </section>
+        <section class="view" id="view-autonomy" aria-label="Agent autonomy and recursive self-improvement">
+          <div class="grid-two">
+            <div class="panel"><div class="panel-head"><div><div class="panel-overline">AGENT AUTONOMY</div><h2>Time horizon measurements</h2></div><span class="panel-tag warning">HISTORICAL / STALE</span></div><div class="feature-number">METR <span>TH 1.1</span></div><p class="body-copy">The time horizon is the duration of a task <em>for a human expert</em> at which the model is estimated to succeed with a specified probability. It does <b>not</b> mean an agent has operated continuously for that long.</p><div class="datum"><span>Last maintained</span><b>September 8, 2026</b></div><div class="datum"><span>50% and 80% success</span><b>Distinct measures</b></div><div class="datum"><span>Over 16 hours</span><b class="warning-text">Reported as unreliable</b></div><div class="empty-state small">Structured time-horizon observations have not been connected in this version. No invented historical chart.</div><div class="footnote"><a href="https://metr.org/time-horizons/" target="_blank" rel="noopener noreferrer">Open METR source and raw data ↗</a></div></div>
+            <div class="panel"><div class="panel-head"><div><div class="panel-overline">RECURSIVE SELF-IMPROVEMENT</div><h2>RSI evidence ladder</h2></div></div><div class="ladder"><div class="ladder-step"><span class="step-n">01</span><div><b>AI assists human AI researchers</b><p>Human-directed programming, experimentation and analysis.</p></div><span class="step-tag">Defined class</span></div><div class="ladder-step"><span class="step-n">02</span><div><b>Automated bounded optimization</b><p>AI searches improvements with external evaluations and constraints.</p></div><span class="step-tag">Documented</span></div><div class="ladder-step"><span class="step-n">03</span><div><b>Automated AI research workflows</b><p>Agents perform extended research cycles; supervision varies.</p></div><span class="step-tag">Case dependent</span></div><div class="ladder-step"><span class="step-n">04</span><div><b>Self-sustaining recursive model improvement</b><p>Repeated autonomous improvements to the very system doing the improving.</p></div><span class="step-tag unverified">Not established here</span></div></div><div class="footnote">RSI means <b>Recursive Self-Improvement</b>, never “Rogue Severity Index”. Evidence of algorithm optimization does not by itself establish runaway RSI.</div></div>
+          </div>
+          <div class="panel slim"><div class="panel-head"><div><div class="panel-overline">DOCUMENTED RSI-ADJACENT RESEARCH</div><h2>AlphaEvolve</h2></div><a class="outline-btn" href="https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/" target="_blank" rel="noopener noreferrer">Original research ↗</a></div><p class="body-copy">Google DeepMind's AlphaEvolve demonstrated algorithm exploration and optimization with automatic evaluators. This is meaningful evidence of AI-assisted algorithm development, but not proof of unsupervised, accelerating model self-improvement.</p></div>
+        </section>
+        <section class="view" id="view-safety" aria-label="Safety and control evidence">
+          <div class="panel"><div class="panel-head"><div><div class="panel-overline">EVIDENCE LEDGER</div><h2>What actually happened?</h2></div><span class="panel-tag">Curated, not exhaustive</span></div><p class="body-copy">A real incident, a lab simulation, a benchmark, and a forecast are different kinds of evidence. Filter the ledger to inspect the original source and the limits of each conclusion.</p><div class="controls"><label>Evidence type <select id="evidenceFilter"><option value="all">All evidence</option><option value="real_incident">Documented incidents</option><option value="controlled_evaluation">Controlled evaluations</option><option value="rsi_evidence">RSI-adjacent research</option><option value="measurement">Measurement & methodology</option></select></label><label>Sort <select id="evidenceSort"><option value="recent">Most recent first</option><option value="oldest">Oldest first</option></select></label></div><div id="evidenceList" class="evidence-list"></div></div>
+          <div class="panel slim"><div class="panel-overline">INTERPRETATION RULE</div><h2>Capabilities ≠ loss of control</h2><p class="body-copy">Safety evidence should be evaluated against agent permissions, incentives, test setup, human supervision, exploitability, and real-world outcomes. This site does not convert disparate incidents into a made-up global danger percentage.</p></div>
+        </section>
+        <section class="view" id="view-scenarios" aria-label="Scenarios and source registry">
+          <div class="grid-two">
+            <div class="panel"><div class="panel-head"><div><div class="panel-overline">WHAT-IF LAB</div><h2>Illustrative ECI trajectory</h2></div><span class="panel-tag warning">NOT A FORECAST</span></div><p class="body-copy">Adjust a hypothetical annual increase in Epoch capability points. This is a mathematical illustration only, not an AGI timeline or a measure of control risk.</p><div class="range-wrap"><div class="range-header"><label for="growthRate">Assumed annual ECI gain</label><strong id="growthLabel">5 points</strong></div><input id="growthRate" type="range" min="0" max="20" step="1" value="5"><div class="range-header"><label for="yearHorizon">Years ahead</label><strong id="yearLabel">5 years</strong></div><input id="yearHorizon" type="range" min="1" max="10" step="1" value="5"></div><div class="chart-wrap"><canvas id="scenarioChart" role="img" aria-label="Illustrative hypothetical ECI trajectory"></canvas></div><div class="footnote">Starting point uses the highest ECI from a dated published snapshot. The chosen growth rate is entered by you, not estimated from the data.</div></div>
+            <div class="panel"><div class="panel-head"><div><div class="panel-overline">DATA HEALTH</div><h2>Update transparency</h2></div></div><div class="datum"><span>Snapshot captured</span><b id="healthSnapshot">—</b></div><div class="datum"><span>Automated import</span><b id="healthImport">Unverified</b></div><div class="datum"><span>Last successful import</span><b id="healthSuccess">None yet</b></div><div class="datum"><span>Next dataset readiness</span><b>Subject to source availability</b></div><div class="empty-state small">A daily GitHub Actions job may check upstream data. If a feed fails, the last valid snapshot is kept and the failure is disclosed.</div><div class="footnote">No key or paid API is required for reading this dashboard.</div></div>
+          </div>
+          <div class="panel"><div class="panel-head"><div><div class="panel-overline">SOURCE REGISTER</div><h2>Where the evidence comes from</h2></div></div><div class="table-wrap"><table class="data-table"><thead><tr><th>DATA SOURCE</th><th>DOMAIN</th><th>LAST SOURCE DATE</th><th>DATA MODE</th><th>ORIGINAL</th></tr></thead><tbody id="sourceRows"></tbody></table></div></div>
+        </section>
+        <footer class="footer"><span>FRONTIER / AI OBSERVATORY · SOURCE-GROUNDED MONITORING</span><span>RSI = RECURSIVE SELF-IMPROVEMENT</span></footer>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
