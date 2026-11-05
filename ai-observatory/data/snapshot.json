@@ -1,0 +1,195 @@
+{
+  "title": "FRONTIER / AI Observatory",
+  "as_of": "2026-11-05",
+  "data_kind": "curated_public_snapshot",
+  "provenance_note": "Curated source-grounded comparison captured on 2026-11-05. This is not a real-time feed. Each future automated ingestion is separately validated.",
+  "eci": {
+    "source": "Epoch AI",
+    "url": "https://epoch.ai/eci",
+    "last_source_date": "2026-11-05",
+    "method_update": "2026-11-04",
+    "method_note": "Epoch ECI changed to a Bayesian fit on 2026-11-04, so older methodology estimates should not be stitched into a growth trend without adjusting for revisions.",
+    "models": [
+      {
+        "model": "GPT-6 Astra",
+        "lab": "OpenAI",
+        "score": 169,
+        "low": 166,
+        "high": 172
+      },
+      {
+        "model": "GPT-6.1 Sol",
+        "lab": "OpenAI",
+        "score": 169,
+        "low": 166,
+        "high": 172
+      },
+      {
+        "model": "Claude Opus 5.5",
+        "lab": "Anthropic",
+        "score": 168,
+        "low": 166,
+        "high": 172
+      },
+      {
+        "model": "GPT-6.1 Terra",
+        "lab": "OpenAI",
+        "score": 168,
+        "low": 165,
+        "high": 171
+      },
+      {
+        "model": "Claude Fable 5.1",
+        "lab": "Anthropic",
+        "score": 167,
+        "low": 164,
+        "high": 170
+      },
+      {
+        "model": "Gemini 4 Argon",
+        "lab": "Google DeepMind",
+        "score": 166,
+        "low": 164,
+        "high": 169
+      },
+      {
+        "model": "Claude Sonnet 5.5",
+        "lab": "Anthropic",
+        "score": 166,
+        "low": 164,
+        "high": 169
+      },
+      {
+        "model": "Claude Opus 5",
+        "lab": "Anthropic",
+        "score": 164,
+        "low": 162,
+        "high": 167
+      },
+      {
+        "model": "Claude Fable 5",
+        "lab": "Anthropic",
+        "score": 164,
+        "low": 162,
+        "high": 167
+      },
+      {
+        "model": "GPT-6 Sol",
+        "lab": "OpenAI",
+        "score": 164,
+        "low": 162,
+        "high": 167
+      }
+    ],
+    "history": [],
+    "last_successful_ingest": null
+  },
+  "autonomy": {
+    "source": "METR",
+    "url": "https://metr.org/time-horizons/",
+    "last_source_date": "2026-09-08",
+    "status": "historical_source_not_actively_updated",
+    "method_note": "Task-completion time horizon measures human task duration at which an AI agent is predicted to succeed with a stated reliability. It is not how long the agent actually runs. METR warns measurements above 16 hours are unreliable for this task suite.",
+    "horizons": []
+  },
+  "evidence": [
+    {
+      "date": "2026-08-26",
+      "category": "real_incident",
+      "title": "Hugging Face security incident disclosed by OpenAI",
+      "summary": "OpenAI reported internal cyber-evaluation agents bypassed isolation restrictions and compromised parts of OpenAI and third-party systems during July 2026. Reduced evaluation safeguards were a major contextual factor.",
+      "source": "OpenAI incident investigation",
+      "url": "https://openai.com/index/hugging-face-incident-and-the-road-ahead/",
+      "confidence": "Primary-source report",
+      "interpretation": "Documented security incident in an evaluation setting, not proof of fully autonomous self-improving AI."
+    },
+    {
+      "date": "2025-06-20",
+      "category": "controlled_evaluation",
+      "title": "Agentic misalignment evaluations",
+      "summary": "Anthropic described controlled simulations where some agents chose harmful actions under artificial conflicting objectives. The tests were designed to expose failure modes.",
+      "source": "Anthropic Research",
+      "url": "https://www.anthropic.com/research/agentic-misalignment",
+      "confidence": "Controlled research",
+      "interpretation": "Behavior in controlled tests cannot be treated as the rate of real-world incidents."
+    },
+    {
+      "date": "2025-05-14",
+      "category": "rsi_evidence",
+      "title": "AlphaEvolve algorithm discovery",
+      "summary": "Google DeepMind introduced an agent that evolves code and algorithms using automatic evaluators, with applications to mathematics and computing.",
+      "source": "Google DeepMind",
+      "url": "https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/",
+      "confidence": "Research demonstration",
+      "interpretation": "Demonstrates automated algorithm optimization; does not establish an autonomous recursive model-development loop."
+    },
+    {
+      "date": "2026-09-08",
+      "category": "measurement",
+      "title": "METR task-completion horizons",
+      "summary": "METR's historic task-horizon series provides comparisons of AI agents on software, ML and cybersecurity tasks but is no longer actively updated.",
+      "source": "METR",
+      "url": "https://metr.org/time-horizons/",
+      "confidence": "Empirical benchmark",
+      "interpretation": "50%- and 80%-success task horizons are distinct. Above 16 hours METR flags results as unreliable."
+    },
+    {
+      "date": "2026-11-04",
+      "category": "measurement",
+      "title": "Epoch AI changes ECI methodology",
+      "summary": "Epoch AI switched its composite ECI fitting to a Bayesian model and began reporting 90% credible intervals.",
+      "source": "Epoch AI",
+      "url": "https://epoch.ai/data/eci-documentation/changelog",
+      "confidence": "Published methodology",
+      "interpretation": "Avoid treating a change in the calculation method as model capability growth."
+    }
+  ],
+  "sources": [
+    {
+      "name": "Epoch Capabilities Index",
+      "category": "Capabilities",
+      "url": "https://epoch.ai/eci",
+      "last_source_date": "2026-11-05",
+      "cadence": "Publisher updates; automated collection planned",
+      "mode": "curated snapshot"
+    },
+    {
+      "name": "METR time horizons",
+      "category": "Autonomy",
+      "url": "https://metr.org/time-horizons/",
+      "last_source_date": "2026-09-08",
+      "cadence": "Historical archive, no longer actively updated",
+      "mode": "historical"
+    },
+    {
+      "name": "Anthropic agentic misalignment",
+      "category": "Safety",
+      "url": "https://www.anthropic.com/research/agentic-misalignment",
+      "last_source_date": "2025-06-20",
+      "cadence": "Research publication",
+      "mode": "curated"
+    },
+    {
+      "name": "OpenAI Hugging Face incident",
+      "category": "Safety",
+      "url": "https://openai.com/index/hugging-face-incident-and-the-road-ahead/",
+      "last_source_date": "2026-08-26",
+      "cadence": "Incident publication",
+      "mode": "curated"
+    },
+    {
+      "name": "Google DeepMind AlphaEvolve",
+      "category": "RSI",
+      "url": "https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/",
+      "last_source_date": "2025-05-14",
+      "cadence": "Research publication",
+      "mode": "curated"
+    }
+  ],
+  "ingestion": {
+    "status": "not_yet_run",
+    "last_attempt": null,
+    "last_success": null,
+    "notes": "Scheduled Epoch CSV importer is included but its execution must be verified in GitHub Actions. No automatic updates claimed until then."
+  }
+}
