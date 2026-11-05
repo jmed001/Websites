@@ -30,6 +30,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: true
+      - name: Validate dashboard JavaScript syntax
+        run: node --check ai-observatory/app.js
       - name: Test data validation code
         run: python3 -m unittest discover -s ai-observatory/tests -v
       - name: Refresh external data (daily and manual only)
