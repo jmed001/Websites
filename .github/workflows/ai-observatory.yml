@@ -1,0 +1,56 @@
+name: AI Observatory - refresh data and publish
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ai-observatory/**"
+      - ".github/workflows/ai-observatory.yml"
+  schedule:
+    - cron: "23 14 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ai-observatory-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Refresh external data (daily and manual only)
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: python3 ai-observatory/scripts/update_epoch.py
+      - name: Preserve validated refresh metadata
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          if ! git diff --quiet -- ai-observatory/data/snapshot.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add ai-observatory/data/snapshot.json
+            git commit -m "Refresh AI Observatory source status and verified data"
+            git push
+          fi
+      - name: Validate published JSON
+        run: python3 -m json.tool ai-observatory/data/snapshot.json > /dev/null
+      - name: Set up GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ai-observatory
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
