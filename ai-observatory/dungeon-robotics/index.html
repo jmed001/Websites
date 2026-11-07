@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#11151c">
-  <meta name="description" content="Rise of the Core: interactive dungeon atlas. Read-only schematic map derived from validated campaign saves.">
+  <meta name="description" content="Rise of the Core: interactive dungeon atlas with a 5-foot square grid for verified room dimensions.">
   <title>Dungeon Atlas · Rise of the Core</title>
   <style>
     :root{color-scheme:dark;--bg:#0d1016;--panel:#141921;--panel2:#191f29;--panel3:#222938;--line:#303846;--line-soft:#26303d;--cream:#e6dfd2;--muted:#8e9aaa;--gold:#cba36d;--gold-soft:#a98153;--blue:#84a4d0;--red:#c67e7d;--radius:12px;--shadow:0 14px 38px rgba(0,0,0,.16)}
@@ -49,7 +49,24 @@
     @media(max-width:1020px){.workspace{grid-template-columns:minmax(0,1fr)}.info-panel{min-height:0}.info-body{max-height:none;min-height:0}.stats{grid-template-columns:repeat(2,1fr)}.map-viewport,.map-svg{min-height:420px}}
     @media(max-width:720px){.app{display:block}.sidebar{min-height:0;padding:17px 18px;border-right:0;border-bottom:1px solid var(--line)}.brandmark{display:none}.brand-title{font-size:21px}.brand-subtitle{margin-top:4px}.line-sep{margin:13px 0}.floor-list{flex-direction:row;overflow-x:auto;gap:7px}.floor-btn{min-width:160px;width:auto}.side-bottom{display:none}.nav-label{margin:0 1px 8px}.body{padding:18px 13px;gap:15px}.top-title{font-size:28px}.top-right{width:100%;justify-content:space-between}.map-head{padding:14px}.map-footer{font-size:10px}.map-viewport,.map-svg{min-height:390px}.stats{gap:8px}.stat{padding:12px;min-height:73px}.stat-value{font-size:21px}.compass{right:13px;top:13px}}
     @media print{body{background:white;color:#1d2633}.app{display:block}.sidebar,.top-right,.map-tools,.compass{display:none!important}.body{padding:0}.workspace{display:block}.map-panel,.info-panel,.stat{box-shadow:none;break-inside:avoid;border:1px solid #888}.map-viewport{background:white}.map-svg{min-height:450px}.info-panel{margin-top:15px}.info-body{max-height:none;min-height:0}.map-footer,.footerbar,.detail-text{color:#444}.top-title,.room-name{color:#111}}
-  </style>
+  
+    .scale-ruler{position:absolute;right:20px;bottom:19px;z-index:2;display:flex;flex-direction:column;align-items:flex-end;gap:4px;border:1px solid #39495b;background:#121a25ed;padding:8px 11px;border-radius:8px;pointer-events:none;color:#cbd5e1;font-size:10px}
+    .scale-ruler[hidden]{display:none!important}.ruler-line{border-left:2px solid #d6ab6f;border-right:2px solid #d6ab6f;border-bottom:2px solid #d6ab6f;height:9px;width:156px;min-width:2px}.ruler-text{display:flex;align-items:center;gap:8px;letter-spacing:.02em}.ruler-note{font-size:9px;color:#a2afbf}
+    .print-scale{display:block;margin-top:16px;width:100%;color:#f3d4a1;background:#34291e;border-color:#756043}.print-scale:hover{background:#453422}
+    .print-sheet{display:none}.print-page{display:none}
+    @page{size:letter;margin:.5in}
+    @media print{
+      body.print-scaled{background:white!important;color:#111!important}
+      body.print-scaled .app{display:none!important}
+      body.print-scaled .print-sheet{display:block!important}
+      body.print-scaled .print-page{display:block!important;page-break-after:always;break-after:page;max-width:7.25in}
+      body.print-scaled .print-page:last-child{page-break-after:auto;break-after:auto}
+      body.print-scaled .print-title{font-family:Georgia,serif;font-size:18pt;color:#171717;margin-bottom:.10in}
+      body.print-scaled .print-meta{font:10pt Arial,sans-serif;margin-bottom:.16in;line-height:1.3}
+      body.print-scaled .print-foot{font:9pt Arial,sans-serif;margin-top:.14in}
+      body.print-scaled .print-drawing{display:block;max-width:none;max-height:none;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+    }
+</style>
 </head>
 <body>
 <div class="app">
@@ -81,12 +98,14 @@
     <div class="workspace">
       <section class="map-panel" aria-label="Interactive floor plan">
         <div class="map-head"><div><div class="section-kicker" id="map-floor-label">Floor plan</div><div class="floor-title" id="map-floor-title">No floor selected</div><div class="floor-desc" id="map-floor-subtitle">Select a floor to explore its rooms</div></div><div class="map-head-right"><span id="map-room-count">—</span></div></div>
-        <div class="map-viewport"><div class="canvas-note">Interior schematic · not to scale</div><div class="compass" aria-hidden="true">N</div>
-          <svg id="map-svg" class="map-svg" viewBox="-480 -330 960 660" role="img" aria-label="Interactive schematic showing saved dungeon rooms. Click a room for details.">
-            <defs><pattern id="floor-grid" width="55" height="55" patternUnits="userSpaceOnUse"><path d="M 55 0 L 0 0 0 55" fill="none" stroke="#344254" stroke-width=".7" opacity=".38"/></pattern><pattern id="detail-grid" width="275" height="275" patternUnits="userSpaceOnUse"><path d="M275 0L0 0 0 275" fill="none" stroke="#536274" stroke-width="1" opacity=".21"/></pattern></defs>
-            <rect x="-10000" y="-10000" width="20000" height="20000" fill="url(#floor-grid)"/><rect x="-10000" y="-10000" width="20000" height="20000" fill="url(#detail-grid)"/>
+        <div class="map-viewport"><div class="canvas-note" id="map-scale-note">Interior schematic</div><div class="compass" aria-hidden="true">N</div>
+          <svg id="map-svg" class="map-svg" viewBox="-450 -300 900 600" role="img" aria-label="Interactive schematic showing saved dungeon rooms. Click a room for details.">
+            <defs><pattern id="floor-grid" width="78" height="78" patternUnits="userSpaceOnUse"><path d="M 78 0 L 0 0 0 78" fill="none" stroke="#344254" stroke-width=".7" opacity=".38"/></pattern><pattern id="detail-grid" width="390" height="390" patternUnits="userSpaceOnUse"><path d="M390 0L0 0 0 390" fill="none" stroke="#536274" stroke-width="1" opacity=".21"/></pattern></defs>
+            <rect id="floor-grid-bg" x="-3000000" y="-3000000" width="6000000" height="6000000" fill="url(#floor-grid)" opacity="0"/>
+            <rect id="detail-grid-bg" x="-3000000" y="-3000000" width="6000000" height="6000000" fill="url(#detail-grid)" opacity="0"/>
             <g id="links-layer"></g><g id="rooms-layer"></g>
           </svg>
+          <div class="scale-ruler" id="scale-ruler" hidden aria-label="Scaled distance ruler"><div class="ruler-text"><span id="scale-ruler-label">10 ft</span><span class="ruler-note">5 ft / square</span></div><div class="ruler-line" id="scale-ruler-line"></div></div>
           <div class="loading" id="loading-label">Reading the latest published dungeon map…</div>
           <div class="map-tools" aria-label="Map controls"><button class="btn" id="zoom-in" aria-label="Zoom in" title="Zoom in"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button><button class="btn" id="zoom-out" aria-label="Zoom out" title="Zoom out"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button><button class="btn" id="zoom-fit" aria-label="Fit all rooms" title="Fit all rooms"><svg viewBox="0 0 24 24"><path d="M8 3H3v5M21 8V3h-5M3 16v5h5M16 21h5v-5"/></svg></button></div>
         </div>
@@ -94,100 +113,228 @@
       </section>
       <aside class="info-panel" aria-label="Room and floor details"><div class="info-header"><div class="info-label">Room Inspector</div><div class="info-label" id="inspector-counter">—</div></div><div class="info-body" id="inspector-body"><p class="empty-panel">Select a room on the map to view its saved details.</p></div></aside>
     </div>
-    <footer class="footerbar"><span id="save-ref">Waiting for verified save data</span><span>Map geometry is schematic · <strong>Campaign save remains authoritative</strong></span></footer>
+    <footer class="footerbar"><span id="save-ref">Waiting for verified save data</span><span>5-foot local grid where measured · <strong>Campaign save remains authoritative</strong></span></footer>
   </main>
 </div>
+<div id="print-sheet" class="print-sheet" aria-live="off"></div>
 <script>
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
   const svg = $('map-svg');
   const NS = 'http://www.w3.org/2000/svg';
+  const CELL = 78;           // display units per physical 5-foot square, not screen inches
+  const FEET_PER_CELL = 5;
   const COLORS = {core:'#cba36d',research:'#aa96d5',workshop:'#86a7d0',foundry:'#c78470',mine:'#b29d82',storage:'#8fa4ba',barracks:'#d58a85',habitat:'#9cab88',defense:'#c78583',corridor:'#8c98ab',general:'#9dacc1'};
-  const state = {data:null,activeFloor:null,selectedRoom:null,view:{x:-480,y:-330,w:960,h:660},pointer:null,lastFetch:0,lastHash:null};
-  const SVG = (tag, attrs={}) => {const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs)){el.setAttribute(k,String(v));}return el;};
-  const el = (tag,className='',text='') => {const n=document.createElement(tag);if(className)n.className=className;if(text!==null)n.textContent=String(text);return n;};
-  const fmt = v => v===null || v===undefined || v==='' ? '—' : String(v);
-  const shortNum = v => {const n=Number(v);return Number.isFinite(n)?new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(n):fmt(v)};
+  const state = {data:null,activeFloor:null,selectedRoom:null,view:{x:-450,y:-300,w:900,h:600},pointer:null,lastFetch:0,lastHash:null};
+  const SVG = (tag,attrs={}) => {const n=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));return n;};
+  const el = (tag,cls='',content='') => {const n=document.createElement(tag);if(cls)n.className=cls;if(content!==null)n.textContent=String(content);return n;};
+  const fmt = value => value===undefined||value===null||value===''?'—':String(value);
+  const shortNum = v => {const n=Number(v);return Number.isFinite(n)?new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(n):fmt(v);};
   const labelCase = s => String(s||'general').replace(/[_-]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
   const roleSymbol = t => ({core:'C',research:'R',workshop:'W',foundry:'F',mine:'M',storage:'S',barracks:'B',habitat:'H',defense:'D',corridor:'↔',general:'•'})[t]||'•';
-  const roomRect = r => ({x:r.layout.x*110,y:r.layout.y*110,w:r.layout.width*110-16,h:r.layout.height*110-16});
-  const viewSet = v => {state.view=v;svg.setAttribute('viewBox',`${v.x} ${v.y} ${v.w} ${v.h}`)};
-  const textBlock = (parent,tag,cls,content) => {const n=el(tag,cls,content);parent.append(n);return n;};
-  const separate = parent => parent.append(el('div','info-line'));
-  const infoSection=(parent,title)=>textBlock(parent,'h3','detail-heading',title);
-  const warning = (parent,msg)=>textBlock(parent,'div','small-warning',msg);
-  function syncBanner(msg){const b=$('status-banner');b.textContent=msg;b.classList.toggle('show',Boolean(msg))}
-  function currentFloor(){return state.data?.floors.find(f=>f.id===state.activeFloor)||null}
-  function currentRoom(){return currentFloor()?.rooms.find(r=>r.id===state.selectedRoom)||null}
-  function head() {
+  const isScaled = room => room?.layout?.source==='saved_5ft_grid';
+  const textBlock = (p,tag,cls,text) => {const n=el(tag,cls,text);p.append(n);return n;};
+  const separate = p => p.append(el('div','info-line'));
+  const infoSection=(p,title)=>textBlock(p,'h3','detail-heading',title);
+  const warning=(p,text)=>textBlock(p,'div','small-warning',text);
+  const currentFloor=()=>state.data?.floors.find(x=>x.id===state.activeFloor)||null;
+  const currentRoom=()=>currentFloor()?.rooms.find(x=>x.id===state.selectedRoom)||null;
+  const rect = room => ({x:room.layout.x*CELL,y:room.layout.y*CELL,w:room.layout.width*CELL,h:room.layout.height*CELL});
+  const floorRooms = f => f ? (f.rooms.some(isScaled) ? f.rooms.filter(isScaled) : f.rooms) : [];
+  function syncBanner(msg){const b=$('status-banner');b.textContent=msg;b.classList.toggle('show',!!msg);}
+  function viewSet(v){state.view=v;svg.setAttribute('viewBox',`${v.x} ${v.y} ${v.w} ${v.h}`);updateRuler();}
+  function updateRuler(){
+    const f=currentFloor(),enabled=f?.rooms.some(isScaled),r=$('scale-ruler');
+    r.hidden=!enabled;
+    if(!enabled)return;
+    const bounds=svg.getBoundingClientRect();
+    const tenFootPixels=2*CELL*(bounds.width||800)/state.view.w;
+    const choice=tenFootPixels<35?{n:5,label:'25 ft'}:tenFootPixels>210?{n:1,label:'5 ft'}:{n:2,label:'10 ft'};
+    const px=choice.n*CELL*(bounds.width||800)/state.view.w;
+    $('scale-ruler-line').style.width=`${Math.max(1,px)}px`;
+    $('scale-ruler-label').textContent=choice.label;
+  }
+  function head(){
     const d=state.data,s=d.summary;
     $('core-name').textContent=fmt(s.core_name);
     $('core-region').textContent=[s.nation,s.nearest_settlement&&`near ${s.nearest_settlement}`,s.world_grid&&`Calmaria ${s.world_grid}`,s.core_level&&`Level ${s.core_level}`].filter(Boolean).join('  ·  ');
     $('test-flag').classList.toggle('hidden',!s.is_test_only);
-    $('stat-floors').textContent=shortNum(s.floor_count);
-    $('stat-rooms').textContent=shortNum(s.room_count);
-    const mana=$('stat-mana');mana.replaceChildren(document.createTextNode(shortNum(s.mana_current)));
-    const cap=el('span','stat-sub','/ '+shortNum(s.mana_capacity));mana.append(cap);
+    $('stat-floors').textContent=shortNum(s.floor_count);$('stat-rooms').textContent=shortNum(s.room_count);
+    const mana=$('stat-mana');mana.replaceChildren(document.createTextNode(shortNum(s.mana_current)));mana.append(el('span','stat-sub','/ '+shortNum(s.mana_capacity)));
     $('stat-matter').textContent=shortNum(s.matter_mu);
     $('save-ref').textContent=`Source: Save ${String(d.source.save_revision).padStart(4,'0')} · SHA-256 ${d.source.save_sha256.slice(0,12)}… · ${fmt(d.source.generated_at_utc)}`;
     $('side-sync').textContent=`Published Save ${String(d.source.save_revision).padStart(4,'0')}`;
   }
-  function floorNav(){const list=$('floor-list');list.replaceChildren();for(const f of state.data.floors){const btn=el('button','floor-btn');btn.type='button';btn.setAttribute('aria-current',String(f.id===state.activeFloor));const numeral=textBlock(btn,'span','floor-num',f.level===null?'?':String(f.level).padStart(2,'0'));numeral.setAttribute('aria-hidden','true');const meta=el('span','floor-meta');textBlock(meta,'strong','',f.name);textBlock(meta,'span','',`${f.rooms.length} ${f.rooms.length===1?'room':'rooms'}`);btn.append(meta);btn.addEventListener('click',()=>selectFloor(f.id));list.append(btn);}if(!state.data.floors.length)textBlock(list,'p','empty-panel','No dungeon floors established.');}
-  function fitView(){const f=currentFloor();if(!f || !f.rooms.length){viewSet({x:-480,y:-330,w:960,h:660});return;}const rs=f.rooms.map(roomRect);let minx=Math.min(...rs.map(r=>r.x)),maxx=Math.max(...rs.map(r=>r.x+r.w)),miny=Math.min(...rs.map(r=>r.y)),maxy=Math.max(...rs.map(r=>r.y+r.h));const margin=190;let w=Math.max(740,maxx-minx+margin*2),h=Math.max(510,maxy-miny+margin*2);const box=svg.getBoundingClientRect(),ratio=(box.width||900)/(box.height||600);if(w/h<ratio)w=h*ratio;else h=w/ratio;viewSet({x:(minx+maxx-w)/2,y:(miny+maxy-h)/2,w,h})}
-  function zoom(factor,anchor){const v=state.view;const a=anchor||{x:v.x+v.w/2,y:v.y+v.h/2};let nw=Math.max(150,Math.min(12000,v.w*factor));let nh=nw*v.h/v.w;viewSet({x:a.x-(a.x-v.x)*nw/v.w,y:a.y-(a.y-v.y)*nh/v.h,w:nw,h:nh})}
-  function svgPoint(evt){const box=svg.getBoundingClientRect(),v=state.view;return{x:v.x+(evt.clientX-box.left)/box.width*v.w,y:v.y+(evt.clientY-box.top)/box.height*v.h}}
-  function selectFloor(id){state.activeFloor=id;const f=currentFloor();state.selectedRoom=f?.rooms?.[0]?.id||null;floorNav();renderMap();fitView();inspector()}
-  function selectRoom(id){state.selectedRoom=id;renderMap();inspector()}
-  function addCenteredText(g,value,x,y,style={}){const t=SVG('text',{x,y,'text-anchor':'middle','dominant-baseline':'middle',fill:style.fill||'#e1e5e9','font-family':'Segoe UI, system-ui, sans-serif','font-size':style.size||16,'font-weight':style.weight||600,'pointer-events':'none', 'letter-spacing': style.spacing||'0'});t.textContent=String(value);g.append(t);return t}
-  function wrapLines(value,max=25){const words=String(value||'').split(' '),out=[],current=[];for(const w of words){if((current.join(' ').length+w.length+1)>max&&current.length){out.push(current.join(' '));current.length=0}current.push(w)}if(current.length)out.push(current.join(' '));return out.slice(0,3)}
-  function renderMap(){const f=currentFloor();$('links-layer').replaceChildren();$('rooms-layer').replaceChildren();$('loading-label').style.display=f&&f.rooms.length?'none':'block';$('loading-label').textContent=f?'No saved rooms on this floor':'No dungeon floor is available';if(!f){$('map-floor-title').textContent='No floor established';$('map-floor-subtitle').textContent='Build a dungeon floor during gameplay';$('map-room-count').textContent='0 rooms';return}
-    $('map-floor-label').textContent=`Level ${fmt(f.level)} · Floor plan`;
-    $('map-floor-title').textContent=f.name;
-    $('map-floor-subtitle').textContent=fmt(f.purpose);
-    $('map-room-count').textContent=`${f.rooms.length} ${f.rooms.length===1?'room':'rooms'}`;
-    const placeholders=f.rooms.filter(r=>r.layout.source==='viewer_placeholder').length;
-    $('layout-confidence').textContent=placeholders ? `${placeholders} illustrative room placement${placeholders===1?'':'s'} · not surveyed` : 'All rooms use saved schematic coordinates';
-    const lookup=new Map(f.rooms.map(x=>[x.id,x]));const done=new Set();
-    for(const room of f.rooms){for(const to of room.connections){const dest=lookup.get(to);if(!dest)continue;const k=[room.id,to].sort().join('::');if(done.has(k))continue;done.add(k);const a=roomRect(room),b=roomRect(dest);const x1=a.x+a.w/2,y1=a.y+a.h/2,x2=b.x+b.w/2,y2=b.y+b.h/2;$('links-layer').append(SVG('line',{x1,y1,x2,y2,stroke:'#bc9870','stroke-width':17,'stroke-linecap':'round',opacity:.27}));$('links-layer').append(SVG('line',{x1,y1,x2,y2,stroke:'#d3b388','stroke-width':2,'stroke-dasharray':'9 10',opacity:.92}));}}
-    for(const room of f.rooms){const r=roomRect(room);const color=COLORS[room.type]||COLORS.general;const g=SVG('g',{'class':`room-node ${room.id===state.selectedRoom?'selected':''}`,role:'button',tabindex:'0','aria-label':`${room.name}, ${labelCase(room.type)} room, ${room.status}`});
-      g.append(SVG('rect',{x:r.x,y:r.y,width:r.w,height:r.h,rx:15,'class':'outline',stroke:'#58677b','stroke-width':'1.8',fill:'#202a36'}));
-      g.append(SVG('rect',{x:r.x+8,y:r.y+8,width:8,height:Math.max(20,r.h-16),rx:4,fill:color,opacity:'.95'}));
-      g.append(SVG('rect',{x:r.x+22,y:r.y+18,width:r.w-39,height:r.h-36,rx:8,fill:'none',stroke:'#384659','stroke-width':'1'}));
-      if(room.layout.source==='viewer_placeholder'){g.append(SVG('rect',{x:r.x+14,y:r.y+14,width:r.w-28,height:r.h-28,rx:9,fill:'none',stroke:color,'stroke-width':1.5,'stroke-dasharray':'9 10',opacity:.35}));}
-      const cx=r.x+r.w/2;const cy=r.y+r.h/2;
-      g.append(SVG('circle',{cx,cy:cy-55,r:22,fill:color,opacity:.15}));addCenteredText(g,roleSymbol(room.type),cx,cy-54,{fill:color,size:20,weight:700});
-      const lines=wrapLines(room.name,27);const start=cy+3-(lines.length-1)*12;lines.forEach((l,i)=>addCenteredText(g,l,cx,start+i*25,{size:Math.min(22,Math.max(15,r.w/22)),weight:650}));
-      addCenteredText(g,labelCase(room.type).toUpperCase(),cx,cy+69,{fill:'#96a5b7',size:10,weight:700,spacing:'2'});
-      g.addEventListener('click',()=>selectRoom(room.id));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectRoom(room.id)}});$('rooms-layer').append(g);
+  function floorNav(){
+    const list=$('floor-list');list.replaceChildren();
+    for(const f of state.data.floors){
+      const btn=el('button','floor-btn');btn.type='button';btn.setAttribute('aria-current',String(f.id===state.activeFloor));
+      const number=textBlock(btn,'span','floor-num',f.level===null?'?':String(f.level).padStart(2,'0'));number.setAttribute('aria-hidden','true');
+      const meta=el('span','floor-meta');textBlock(meta,'strong','',f.name);textBlock(meta,'span','',`${f.rooms.length} ${f.rooms.length===1?'room':'rooms'}`);
+      btn.append(meta);btn.addEventListener('click',()=>selectFloor(f.id));list.append(btn);
     }
+    if(!state.data.floors.length)textBlock(list,'p','empty-panel','No dungeon floors established.');
   }
-  function facts(parent,items){const grid=el('div','fact-grid');for(const [lab,val] of items){const d=el('div');textBlock(d,'span','fact-label',lab);textBlock(d,'span','fact-value',fmt(val));grid.append(d)}parent.append(grid)}
-  function stackItems(parent,items,render){const box=el('div','stack');for(const i of items){const n=el('div','subitem');textBlock(n,'strong','',fmt(i.name));textBlock(n,'span','',render(i));box.append(n)}parent.append(box)}
-  function inspector(){const f=currentFloor(),room=currentRoom(),b=$('inspector-body');b.replaceChildren();$('inspector-counter').textContent=f?.rooms?`${f.rooms.length} ROOMS`:'—';if(!f){textBlock(b,'p','empty-panel','This campaign has no established dungeon floors.');return}
-    if(room){const mark=textBlock(b,'div','room-mark',roleSymbol(room.type));mark.style.color=COLORS[room.type]||COLORS.general;
+  function fitView(){
+    const f=currentFloor(),rooms=floorRooms(f);
+    if(!rooms.length){viewSet({x:-450,y:-300,w:900,h:600});return;}
+    const boxes=rooms.map(rect),minx=Math.min(...boxes.map(r=>r.x)),maxx=Math.max(...boxes.map(r=>r.x+r.w));
+    const miny=Math.min(...boxes.map(r=>r.y)),maxy=Math.max(...boxes.map(r=>r.y+r.h));
+    const margin=Math.max(80,Math.min(155,(maxx-minx+maxy-miny)/3));
+    let w=Math.max(470,maxx-minx+2*margin),h=Math.max(390,maxy-miny+2*margin);
+    const bounds=svg.getBoundingClientRect(),ratio=(bounds.width||900)/(bounds.height||600);
+    if(w/h<ratio)w=h*ratio;else h=w/ratio;
+    viewSet({x:(minx+maxx-w)/2,y:(miny+maxy-h)/2,w,h});
+  }
+  function zoom(factor,anchor){
+    const v=state.view,a=anchor||{x:v.x+v.w/2,y:v.y+v.h/2};
+    const nw=Math.max(100,Math.min(3000000,v.w*factor));const nh=nw*v.h/v.w;
+    viewSet({x:a.x-(a.x-v.x)*nw/v.w,y:a.y-(a.y-v.y)*nh/v.h,w:nw,h:nh});
+  }
+  function svgPoint(evt){const bounds=svg.getBoundingClientRect(),v=state.view;return{x:v.x+(evt.clientX-bounds.left)/bounds.width*v.w,y:v.y+(evt.clientY-bounds.top)/bounds.height*v.h};}
+  function selectFloor(id){state.activeFloor=id;state.selectedRoom=currentFloor()?.rooms?.[0]?.id||null;floorNav();renderMap();fitView();inspector();}
+  function selectRoom(id){state.selectedRoom=id;renderMap();inspector();}
+  function centered(g,text,x,y,{size=16,color='#e1e5e9',weight=600,spacing='0'}={}){
+    const n=SVG('text',{x,y,'text-anchor':'middle','dominant-baseline':'middle',fill:color,'font-family':'Segoe UI, system-ui, sans-serif','font-size':size,'font-weight':weight,'pointer-events':'none','letter-spacing':spacing});
+    n.textContent=String(text);g.append(n);return n;
+  }
+  function wrapLines(text,max=22){const words=String(text||'').split(/\s+/),out=[],current=[];for(const word of words){if(current.length&&current.join(' ').length+word.length+1>max){out.push(current.join(' '));current.length=0;}current.push(word);}if(current.length)out.push(current.join(' '));return out.slice(0,2);}
+  function doorBetween(a,b){
+    const A=a.layout,B=b.layout;const n=v=>v*CELL;
+    let x,y,vertical=false;
+    if(Math.abs(A.x+A.width-B.x)<1e-6 || Math.abs(B.x+B.width-A.x)<1e-6){
+      x=n(Math.abs(A.x+A.width-B.x)<1e-6?B.x:A.x);y=n((Math.max(A.y,B.y)+Math.min(A.y+A.height,B.y+B.height))/2);vertical=true;
+    }else if(Math.abs(A.y+A.height-B.y)<1e-6 || Math.abs(B.y+B.height-A.y)<1e-6){
+      y=n(Math.abs(A.y+A.height-B.y)<1e-6?B.y:A.y);x=n((Math.max(A.x,B.x)+Math.min(A.x+A.width,B.x+B.width))/2);
+    }else{return;}
+    const length=Math.min(32,CELL*.62),cut=length/2;
+    const g=SVG('g',{'aria-label':`Saved connection between ${a.name} and ${b.name}`});
+    if(vertical){g.append(SVG('line',{x1:x,y1:y-cut,x2:x,y2:y+cut,stroke:'#101820','stroke-width':7}));g.append(SVG('line',{x1:x,y1:y-cut,x2:x,y2:y+cut,stroke:'#eac68e','stroke-width':2.5}));}
+    else{g.append(SVG('line',{x1:x-cut,y1:y,x2:x+cut,y2:y,stroke:'#101820','stroke-width':7}));g.append(SVG('line',{x1:x-cut,y1:y,x2:x+cut,y2:y,stroke:'#eac68e','stroke-width':2.5}));}
+    $('links-layer').append(g);
+  }
+  function drawRoom(room,unscaled){
+    const r=rect(room),color=COLORS[room.type]||COLORS.general;
+    const g=SVG('g',{'class':`room-node ${room.id===state.selectedRoom?'selected':''}`,role:'button',tabindex:'0','aria-label':`${room.name}, ${labelCase(room.type)}, ${unscaled?'unscaled illustration':`${room.layout.east_west_ft} by ${room.layout.north_south_ft} feet`}`});
+    const inset=unscaled?7:0;
+    g.append(SVG('rect',{x:r.x+inset,y:r.y+inset,width:r.w-2*inset,height:r.h-2*inset,rx:unscaled?11:2,'class':'outline',stroke:unscaled?'#7a7e88':'#5d7188','stroke-width':2.5,fill:unscaled?'#202a35':'#1c2938','stroke-dasharray':unscaled?'9 7':'none'}));
+    if(!unscaled && r.w>42 && r.h>42)g.append(SVG('rect',{x:r.x+8,y:r.y+8,width:5,height:r.h-16,fill:color,opacity:'.8'}));
+    const cx=r.x+r.w/2,cy=r.y+r.h/2,small=Math.min(r.w,r.h)<108,tiny=Math.min(r.w,r.h)<70;
+    if(!tiny){g.append(SVG('circle',{cx,cy:cy-(small?14:37),r:small?14:18,fill:color,opacity:'.18'}));centered(g,roleSymbol(room.type),cx,cy-(small?14:36),{size:small?12:16,color,weight:750});}
+    const lines=wrapLines(room.name,small?13:25),lineH=small?13:21,start=cy+(small?8:-2)-(lines.length-1)*lineH/2;
+    if(!tiny)for(let i=0;i<lines.length;i++)centered(g,lines[i],cx,start+i*lineH,{size:small?11:Math.min(18,Math.max(12,r.w/14)),weight:700});
+    if(tiny)centered(g,roleSymbol(room.type),cx,cy,{size:Math.max(11,Math.min(18,r.w/2)),color,weight:750});
+    if(r.h>150 && r.w>120){const foot=unscaled?'NOT TO SCALE':`${shortNum(room.layout.east_west_ft)} × ${shortNum(room.layout.north_south_ft)} ft`;
+       centered(g,foot,cx,cy+r.h*.35,{size:11,color:'#a5b6c8',weight:550,spacing:'.3'});}
+    g.addEventListener('click',()=>selectRoom(room.id));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectRoom(room.id);}});
+    $('rooms-layer').append(g);
+  }
+  function renderMap(){
+    const f=currentFloor(),links=$('links-layer'),rooms=$('rooms-layer'),status=$('map-scale-note');links.replaceChildren();rooms.replaceChildren();
+    $('loading-label').style.display=f?.rooms?.length?'none':'block';$('loading-label').textContent=f?'No saved rooms on this floor':'No dungeon floor available';
+    if(!f){$('map-floor-title').textContent='No floor established';$('map-floor-subtitle').textContent='Build a floor during gameplay';$('map-room-count').textContent='0 rooms';return;}
+    $('map-floor-label').textContent=`Level ${fmt(f.level)} · Floor plan`;
+    $('map-floor-title').textContent=f.name;$('map-floor-subtitle').textContent=fmt(f.purpose);
+    const countScaled=f.rooms.filter(isScaled).length,unscaled=f.rooms.length-countScaled;
+    $('map-room-count').textContent=`${f.rooms.length} ${f.rooms.length===1?'room':'rooms'}`;
+    $('floor-grid-bg').setAttribute('opacity',countScaled?'.95':'0');$('detail-grid-bg').setAttribute('opacity',countScaled?'.8':'0');
+    status.textContent=countScaled?'Each square = 5 × 5 ft':'Unmeasured floor · schematic only';
+    $('layout-confidence').textContent=countScaled ?
+      `${countScaled} measured room${countScaled===1?'':'s'} at 5 ft/square${unscaled?` · ${unscaled} unscaled record${unscaled===1?'':'s'} shown in inspector`:''}` :
+      `${unscaled} illustrative room placement${unscaled===1?'':'s'} · dimensions unknown`;
+    const visible=floorRooms(f);const lookup=new Map(f.rooms.map(x=>[x.id,x]));
+    const drawn=new Set();
+    for(const room of visible){for(const id of room.connections){const other=lookup.get(id);if(!other || !isScaled(room) || !isScaled(other))continue;
+      const key=[room.id,id].sort().join('::');if(drawn.has(key))continue;drawn.add(key);doorBetween(room,other);}}
+    for(const room of visible)drawRoom(room,!isScaled(room));
+    updateRuler();
+  }
+  function facts(parent,items){const grid=el('div','fact-grid');for(const [label,value] of items){const item=el('div');textBlock(item,'span','fact-label',label);textBlock(item,'span','fact-value',fmt(value));grid.append(item);}parent.append(grid);}
+  function stackItems(parent,items,render){const box=el('div','stack');for(const item of items){const block=el('div','subitem');textBlock(block,'strong','',fmt(item.name));textBlock(block,'span','',render(item));box.append(block);}parent.append(box);}
+  function inspector(){
+    const f=currentFloor(),room=currentRoom(),b=$('inspector-body');b.replaceChildren();$('inspector-counter').textContent=f?.rooms?`${f.rooms.length} ROOMS`:'—';
+    if(!f){textBlock(b,'p','empty-panel','No established dungeon floors.');return;}
+    if(room){
+      const mark=textBlock(b,'div','room-mark',roleSymbol(room.type));mark.style.color=COLORS[room.type]||COLORS.general;
       textBlock(b,'h3','room-name',room.name);textBlock(b,'p','room-type',`${labelCase(room.type)} · ${fmt(f.name)}`);textBlock(b,'span','room-status',room.status);
-      separate(b);infoSection(b,'Purpose & notes');textBlock(b,'p','detail-text',room.purpose||room.notes||'No additional room description is recorded.');if(room.purpose&&room.notes&&room.notes!==room.purpose){textBlock(b,'p','detail-text',room.notes).style.marginTop='8px'}
-      facts(b,[['Room ID',room.id],['Floor',f.level],['Connections',room.connections.length],['Geometry',room.layout.source==='viewer_placeholder'?'Illustrative':'Saved schematic']]);
-      if(room.connections.length){separate(b);infoSection(b,'Connected rooms');const tags=el('div','tagrow');for(const id of room.connections){const other=f.rooms.find(r=>r.id===id);const button=el('button','btn ghost',other?.name||id);button.addEventListener('click',()=>selectRoom(id));tags.append(button)}b.append(tags)}
-      if(room.layout.source==='viewer_placeholder')warning(b,'The room exists in the campaign save, but its physical layout was never specified. Its position and size are only a visual placeholder.');
-    }else{textBlock(b,'p','empty-panel','No rooms recorded on this floor yet. The map will fill in as rooms are constructed and saved.');}
-    if(f.unassigned_facilities.length){separate(b);infoSection(b,'Floor facilities');stackItems(b,f.unassigned_facilities,i=>[labelCase(i.status),i.outputs_per_day?.join(', ')].filter(Boolean).join(' · '));textBlock(b,'p','fact-label','Facility-to-room positions are not specified in the save.').style.marginTop='9px';}
-    if(f.floor_units.length){separate(b);infoSection(b,'Known floor occupants');stackItems(b,f.floor_units,i=>[labelCase(i.kind),labelCase(i.status),i.role].filter(Boolean).join(' · '));textBlock(b,'p','fact-label','Floor is known, precise room placement is not specified.').style.marginTop='9px'}
-    if(f.notes){separate(b);infoSection(b,'Floor record');textBlock(b,'p','detail-text',f.notes)}
+      separate(b);infoSection(b,'Purpose & notes');textBlock(b,'p','detail-text',room.purpose||room.notes||'No additional description saved.');
+      if(room.purpose && room.notes && room.notes!==room.purpose)textBlock(b,'p','detail-text',room.notes).style.marginTop='8px';
+      facts(b,[['Room ID',room.id],['Floor',f.level],['Connections',room.connections.length],['Geometry',isScaled(room)?'5-foot grid':'Unmeasured']]);
+      if(isScaled(room)){
+        separate(b);infoSection(b,'Physical dimensions');
+        const l=room.layout;
+        facts(b,[['East–west',`${shortNum(l.east_west_ft)} ft`],['North–south',`${shortNum(l.north_south_ft)} ft`],
+          ['Ceiling height',l.ceiling_height_ft===null?'Not established':`${shortNum(l.ceiling_height_ft)} ft`],
+          ['Floor area',`${shortNum(l.area_sqft)} sq ft`],['Volume',l.volume_cuft===null?'Not established':`${shortNum(l.volume_cuft)} cu ft`],
+          ['Reference',`Grid (${shortNum(l.x)}, ${shortNum(l.y)})`]]);
+        if(l.declared_dimensions_ft){const dim=l.declared_dimensions_ft;textBlock(b,'p','detail-text',`Requested: ${shortNum(dim.width)} × ${shortNum(dim.length)} × ${shortNum(dim.height)} ft${l.orientation?' · '+labelCase(l.orientation).replace(' ', '–')+' axis':''}`).style.marginTop='10px';}
+        const btn=el('button','btn print-scale','Print this room · 1″ = 5 ft');btn.type='button';btn.addEventListener('click',()=>printRoom(room,f));b.append(btn);
+      }else{
+        warning(b,'This room is saved, but its size and position were never established. No physical dimensions are inferred. Set its dimensions during gameplay before connecting accurately scaled rooms.');
+      }
+      if(room.connections.length){separate(b);infoSection(b,'Connected rooms');const tags=el('div','tagrow');for(const id of room.connections){const other=f.rooms.find(r=>r.id===id);const btn=el('button','btn ghost',other?.name||id);btn.type='button';btn.addEventListener('click',()=>selectRoom(id));tags.append(btn);}b.append(tags);}
+    }else{textBlock(b,'p','empty-panel','No rooms are recorded.');}
+    const unmapped=f.rooms.filter(r=>!isScaled(r));
+    if(f.rooms.some(isScaled)&&unmapped.length){separate(b);infoSection(b,'Unscaled room records');const tags=el('div','tagrow');for(const r of unmapped){const btn=el('button','btn ghost',r.name);btn.type='button';btn.addEventListener('click',()=>selectRoom(r.id));tags.append(btn);}b.append(tags);}
+    if(f.unassigned_facilities.length){separate(b);infoSection(b,'Floor facilities');stackItems(b,f.unassigned_facilities,i=>[labelCase(i.status),i.outputs_per_day?.join(', ')].filter(Boolean).join(' · '));textBlock(b,'p','fact-label','Facility positions not established in the save.').style.marginTop='9px';}
+    if(f.floor_units.length){separate(b);infoSection(b,'Known floor occupants');stackItems(b,f.floor_units,i=>[labelCase(i.kind),labelCase(i.status),i.role].filter(Boolean).join(' · '));textBlock(b,'p','fact-label','Exact room placement not established.').style.marginTop='9px';}
+    if(f.notes){separate(b);infoSection(b,'Floor record');textBlock(b,'p','detail-text',f.notes);}
   }
-  async function refresh(isManual=false){if($('refresh-btn').disabled)return;$('refresh-btn').disabled=true;try{const response=await fetch(`./map-data.json?cache=${Date.now()}`,{cache:'no-store'});if(!response.ok)throw new Error(`HTTP ${response.status}`);const data=await response.json();if(data.document_type!=='riseofcore_dungeon_atlas_projection'||!Array.isArray(data.floors)||!data.source?.save_sha256)throw new Error('Invalid dungeon atlas file');if(!data.source.save_sha256.match(/^[a-f0-9]{64}$/))throw new Error('Invalid source checksum');const old=state.lastHash;state.data=data;state.lastHash=data.source.save_sha256;state.lastFetch=Date.now();const sameFloor=data.floors.some(f=>f.id===state.activeFloor);state.activeFloor=sameFloor?state.activeFloor:(data.floors[0]?.id||null);const f=currentFloor();state.selectedRoom=f?.rooms.find(x=>x.id===state.selectedRoom)?.id || f?.rooms?.[0]?.id || null;
-      head();floorNav();renderMap();if(!old||!sameFloor)fitView();inspector();syncBanner('');if(isManual && old===state.lastHash){$('side-sync').textContent='Already up to date';}else if(old && old!==state.lastHash){$('side-sync').textContent='New map revision loaded';}
-    }catch(err){$('loading-label').style.display='block';$('loading-label').textContent='Unable to load published map';syncBanner('Map data could not be retrieved. This site is read-only, and your campaign saves are unaffected. '+err.message);$('side-sync').textContent='Map data unavailable'}finally{$('refresh-btn').disabled=false}}
-  $('refresh-btn').addEventListener('click',()=>refresh(true));$('print-btn').addEventListener('click',()=>window.print());$('zoom-in').addEventListener('click',()=>zoom(.77));$('zoom-out').addEventListener('click',()=>zoom(1.3));$('zoom-fit').addEventListener('click',fitView);
-  svg.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY>0?1.12:.88,svgPoint(e))},{passive:false});
-  svg.addEventListener('pointerdown',e=>{if(e.button!==0 || e.target.closest?.('.room-node'))return;state.pointer={clientX:e.clientX,clientY:e.clientY,view:{...state.view}};svg.setPointerCapture(e.pointerId);svg.classList.add('dragging')});
-  svg.addEventListener('pointermove',e=>{if(!state.pointer)return;const box=svg.getBoundingClientRect(),p=state.pointer;viewSet({...p.view,x:p.view.x-(e.clientX-p.clientX)*p.view.w/box.width,y:p.view.y-(e.clientY-p.clientY)*p.view.h/box.height})});
-  function stopPointer(){state.pointer=null;svg.classList.remove('dragging')}svg.addEventListener('pointerup',stopPointer);svg.addEventListener('pointercancel',stopPointer);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden && Date.now()-state.lastFetch>60000)refresh(false)});
-  setInterval(()=>{if(!document.hidden && Date.now()-state.lastFetch>60000)refresh(false)},65000);
+  function printRoom(room,floor){
+    if(!isScaled(room)){syncBanner('True-scale printing requires saved, approved physical room dimensions.');return;}
+    const l=room.layout,cols=l.width,rows=l.height;
+    const nX=Math.ceil(cols/7),nY=Math.ceil(rows/8),pages=nX*nY;
+    if(pages>64){syncBanner('This room needs more than 64 letter-size pages at 1-inch squares. Use the ordinary overview print or select a smaller area.');return;}
+    const target=$('print-sheet');target.replaceChildren();
+    for(let row=0;row<nY;row++)for(let col=0;col<nX;col++){
+      const x=col*7,y=row*8,w=Math.min(7,cols-x),h=Math.min(8,rows-y);
+      const sheet=el('div','print-page');
+      textBlock(sheet,'h1','print-title',`${room.name} · ${floor.name}`);
+      textBlock(sheet,'p','print-meta',`5-ft squares · 1-inch printed squares · ${shortNum(l.east_west_ft)} × ${shortNum(l.north_south_ft)} ft · ceiling ${l.ceiling_height_ft===null?'not recorded':shortNum(l.ceiling_height_ft)+' ft'} · tile ${row*nX+col+1} of ${pages}`);
+      const drawing=SVG('svg',{xmlns:NS,width:`${w}in`,height:`${h}in`,viewBox:`0 0 ${w*100} ${h*100}`,'class':'print-drawing','aria-label':'Room grid at one inch per five feet'});
+      drawing.append(SVG('rect',{x:0,y:0,width:w*100,height:h*100,fill:'#f7f7f5',stroke:'#202020','stroke-width':2}));
+      for(let i=1;i<Math.ceil(w);i++)if(i<w)drawing.append(SVG('line',{x1:i*100,x2:i*100,y1:0,y2:h*100,stroke:'#7d8992','stroke-width':1}));
+      for(let j=1;j<Math.ceil(h);j++)if(j<h)drawing.append(SVG('line',{x1:0,x2:w*100,y1:j*100,y2:j*100,stroke:'#7d8992','stroke-width':1}));
+      sheet.append(drawing);
+      textBlock(sheet,'p','print-foot','Print at 100% / Actual Size. Disable “Fit to page.” Paper squares must measure 1 inch.');
+      target.append(sheet);
+    }
+    document.body.classList.add('print-scaled');
+    window.print();
+    // Some browsers do not fire afterprint consistently; reset after focus.
+    window.addEventListener('focus',()=>document.body.classList.remove('print-scaled'),{once:true});
+  }
+  window.addEventListener('afterprint',()=>document.body.classList.remove('print-scaled'));
+  async function refresh(isManual=false){
+    if($('refresh-btn').disabled)return;$('refresh-btn').disabled=true;
+    try{
+      const response=await fetch(`./map-data.json?cache=${Date.now()}`,{cache:'no-store'});
+      if(!response.ok)throw new Error(`HTTP ${response.status}`);
+      const data=await response.json();
+      if(data.document_type!=='riseofcore_dungeon_atlas_projection'||!Array.isArray(data.floors)||!data.source?.save_sha256||!/^([a-f0-9]{64})$/.test(data.source.save_sha256))throw new Error('Invalid or incomplete atlas projection');
+      // Legacy map projections are not reinterpreted as 5-foot geometry.
+      const old=state.lastHash;state.data=data;state.lastHash=data.source.save_sha256;state.lastFetch=Date.now();
+      const sameFloor=data.floors.some(f=>f.id===state.activeFloor);state.activeFloor=sameFloor?state.activeFloor:data.floors[0]?.id||null;
+      const f=currentFloor();state.selectedRoom=f?.rooms.find(x=>x.id===state.selectedRoom)?.id||f?.rooms?.[0]?.id||null;
+      head();floorNav();renderMap();if(!old || !sameFloor)fitView();inspector();syncBanner('');
+      if(isManual && old===state.lastHash)$('side-sync').textContent='Already up to date';
+      else if(old && old!==state.lastHash)$('side-sync').textContent='New map revision loaded';
+    }catch(err){$('loading-label').style.display='block';$('loading-label').textContent='Unable to load published map';syncBanner('Map data unavailable. Canonical Google Drive campaign saves are unaffected. '+err.message);$('side-sync').textContent='Map unavailable';}
+    finally{$('refresh-btn').disabled=false;}
+  }
+  $('refresh-btn').addEventListener('click',()=>refresh(true));$('print-btn').addEventListener('click',()=>window.print());
+  $('zoom-in').addEventListener('click',()=>zoom(.77));$('zoom-out').addEventListener('click',()=>zoom(1.3));$('zoom-fit').addEventListener('click',fitView);
+  svg.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY>0?1.12:.88,svgPoint(e));},{passive:false});
+  svg.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest?.('.room-node'))return;state.pointer={clientX:e.clientX,clientY:e.clientY,view:{...state.view}};svg.setPointerCapture(e.pointerId);svg.classList.add('dragging');});
+  svg.addEventListener('pointermove',e=>{if(!state.pointer)return;const box=svg.getBoundingClientRect(),p=state.pointer;viewSet({...p.view,x:p.view.x-(e.clientX-p.clientX)*p.view.w/box.width,y:p.view.y-(e.clientY-p.clientY)*p.view.h/box.height});});
+  const stop=()=>{state.pointer=null;svg.classList.remove('dragging');};svg.addEventListener('pointerup',stop);svg.addEventListener('pointercancel',stop);
+  window.addEventListener('resize',updateRuler);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-state.lastFetch>60000)refresh(false);});
+  setInterval(()=>{if(!document.hidden&&Date.now()-state.lastFetch>60000)refresh(false);},65000);
   refresh();
 })();
+
 </script>
 </body>
 </html>

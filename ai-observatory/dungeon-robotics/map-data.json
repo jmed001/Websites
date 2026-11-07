@@ -1,7 +1,14 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "document_type": "riseofcore_dungeon_atlas_projection",
-  "authority": "PUBLIC DERIVED VIEW; exact game state is the validated Google Drive campaign save, not this file.",
+  "authority": "PUBLIC DERIVED VIEW; verified Google Drive campaign save is authoritative, not this file.",
+  "map_standard": {
+    "feet_per_square": 5,
+    "square_footage": 25,
+    "coordinate_system": "local floor grid; x east, y south",
+    "print_1_inch_per_square": true,
+    "physical_scale_applies_only_when": "layout.source == saved_5ft_grid"
+  },
   "source": {
     "campaign_id": "TEST_ONLY_TEST_CORE_20261107_01",
     "campaign_title": "TEST_ONLY - Test Core - 2026-11-07",
@@ -9,7 +16,7 @@
     "save_filename": "RiseOfCore_Campaign_Save_0002.json",
     "save_sha256": "36f4e90db751056fc1c9a4bef8577ff70dbaeb3ad84624175e2eb1a2f25d8e48",
     "ruleset_version": "1.3",
-    "generated_at_utc": "2026-11-07T19:28:54Z"
+    "generated_at_utc": "2026-11-07T20:17:32Z"
   },
   "summary": {
     "core_name": "Test Core",
@@ -27,6 +34,7 @@
     "scene": "TEST_ONLY: Inside the survey alcove workshop beneath the disused station near Teri (F4). A decoded wall survey points toward an iron-bearing seam with a likely safe approach. The newly manufactured small scripted crawler Sparky stands beside Test Core, awaiting its first order.",
     "floor_count": 1,
     "room_count": 1,
+    "measured_room_count": 0,
     "unit_count_named": 1
   },
   "floors": [
@@ -38,6 +46,8 @@
       "status": "existing_at_start",
       "notes": "Pre-existing one floor, test-only origin grant. Maximum allowable floors = 5.",
       "world_grid": "F4",
+      "scale_mode": "illustrative_only",
+      "scaled_room_count": 0,
       "rooms": [
         {
           "id": "TEST_ZONE_SURVEY_ALCOVE",
@@ -53,7 +63,14 @@
             "width": 4,
             "height": 3,
             "source": "viewer_placeholder",
-            "notes": "This illustrative placement is not a surveyed or saved spatial fact."
+            "feet_per_cell": null,
+            "east_west_ft": null,
+            "north_south_ft": null,
+            "ceiling_height_ft": null,
+            "area_sqft": null,
+            "volume_cuft": null,
+            "orientation": null,
+            "notes": "Illustrative legacy placement: no physical size or location was established in play."
           },
           "connections": [],
           "facility_ids": [],
