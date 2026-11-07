@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11151c">
+  <meta name="description" content="Rise of the Core: interactive dungeon atlas. Read-only schematic map derived from validated campaign saves.">
+  <title>Dungeon Atlas · Rise of the Core</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0d1016;--panel:#141921;--panel2:#191f29;--panel3:#222938;--line:#303846;--line-soft:#26303d;--cream:#e6dfd2;--muted:#8e9aaa;--gold:#cba36d;--gold-soft:#a98153;--blue:#84a4d0;--red:#c67e7d;--radius:12px;--shadow:0 14px 38px rgba(0,0,0,.16)}
+    *{box-sizing:border-box}html,body{height:100%;margin:0}body{background:var(--bg);font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--cream);font-size:14px;line-height:1.45}
+    button{font:inherit;cursor:pointer}button:focus-visible,[role=button]:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+    .app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh;max-width:1920px;margin:0 auto}
+    .sidebar{border-right:1px solid var(--line);background:#11151d;display:flex;flex-direction:column;min-height:100vh;padding:30px 21px 22px}
+    .brandmark{width:39px;height:39px;border:1px solid #8b6c44;background:linear-gradient(140deg,#3b3028,#171c24);display:grid;place-items:center;transform:rotate(45deg);border-radius:6px;margin:10px 8px 21px}
+    .brandmark svg{transform:rotate(-45deg);stroke:var(--gold)}.eyebrow{letter-spacing:.18em;font-size:10px;color:var(--gold);font-weight:750;text-transform:uppercase}
+    h1,h2,h3,p{margin:0}.brand-title{font-family:Georgia,serif;letter-spacing:-.02em;font-size:24px;line-height:1.17;font-weight:500}.brand-subtitle{font-size:11px;letter-spacing:.15em;color:var(--muted);margin-top:9px;text-transform:uppercase}
+    .line-sep{height:1px;background:var(--line);margin:27px 0 20px}
+    .nav-label{color:#788596;letter-spacing:.13em;text-transform:uppercase;font-size:10px;font-weight:800;margin:0 8px 12px}
+    .floor-list{display:flex;flex-direction:column;gap:5px}.floor-btn{border:1px solid transparent;color:#a6b0bf;text-align:left;background:transparent;border-radius:9px;padding:12px 11px;display:flex;align-items:center;gap:12px;width:100%}
+    .floor-btn:hover{background:#1b222d;color:#fff}.floor-btn[aria-current=true]{border-color:#5b4a38;background:linear-gradient(90deg,rgba(203,163,109,.12),rgba(203,163,109,.025));color:var(--cream)}
+    .floor-num{color:#d7b98d;border:1px solid #6d593e;background:#27251f;font-size:11px;line-height:28px;width:30px;height:30px;border-radius:7px;text-align:center;font-weight:750;flex-shrink:0}
+    .floor-meta{min-width:0}.floor-meta strong{display:block;font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.floor-meta span{display:block;color:#8791a0;font-size:11px;margin-top:2px}
+    .side-bottom{margin-top:auto;border-top:1px solid var(--line);padding:18px 6px 0}.statusline{display:flex;align-items:center;gap:8px;color:#a6b0bf;font-size:12px}.status-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;box-shadow:0 0 0 3px #443626}.side-small{margin-top:9px;color:#667588;font-size:11px;line-height:1.55}
+    .body{min-width:0;display:flex;flex-direction:column;padding:28px 34px 27px;gap:23px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}.top-title{font-family:Georgia,serif;font-weight:500;font-size:32px;line-height:1.15;letter-spacing:-.025em}.top-subtitle{font-size:12px;color:var(--muted);margin-top:7px}
+    .top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pill{border:1px solid #5a4832;background:#2e261d;color:#e2bd88;font-size:10px;letter-spacing:.07em;font-weight:850;padding:7px 10px;border-radius:30px;text-transform:uppercase}
+    .pill.hidden{display:none}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:8px;color:#cbd5df;background:#1c222d;padding:9px 13px;font-size:12px;font-weight:650;transition:background .15s,transform .15s}.btn:hover{background:#293241}.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.ghost{background:transparent;border-color:#343e4d}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.stat{background:var(--panel);border:1px solid var(--line-soft);border-radius:11px;padding:14px 17px;min-height:83px}.stat-label{font-size:10px;font-weight:750;text-transform:uppercase;letter-spacing:.1em;color:#8693a5}.stat-value{font-size:23px;letter-spacing:-.03em;font-weight:650;margin-top:5px;font-variant-numeric:tabular-nums}.stat-sub{font-size:10px;color:var(--muted);margin-left:4px;letter-spacing:0;font-weight:500}
+    .workspace{display:grid;grid-template-columns:minmax(0,1fr) 304px;gap:16px;min-height:550px;flex:1}.map-panel,.info-panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);min-width:0;box-shadow:var(--shadow)}
+    .map-panel{display:flex;flex-direction:column;overflow:hidden}.map-head{min-height:70px;border-bottom:1px solid var(--line);padding:15px 20px;display:flex;gap:12px;justify-content:space-between;align-items:center}.section-kicker{font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:750;color:var(--gold)}.floor-title{font-size:18px;font-weight:650;margin-top:3px}.floor-desc{font-size:11px;color:var(--muted);margin-top:3px}.map-head-right{display:flex;align-items:center;gap:11px;color:#8794a6;font-size:11px}
+    .map-viewport{position:relative;min-height:420px;flex:1;background:radial-gradient(ellipse at 50% 45%,#19222e 0%,#111720 72%);overflow:hidden}.map-svg{width:100%;height:100%;min-height:420px;display:block;user-select:none;touch-action:none;cursor:grab}.map-svg.dragging{cursor:grabbing}
+    .map-viewport:after{content:"";position:absolute;pointer-events:none;inset:0;box-shadow:inset 0 0 65px 22px rgba(13,16,22,.3)}
+    .compass{position:absolute;top:18px;right:20px;z-index:1;width:43px;height:43px;border:1px solid #3d4857;border-radius:50%;background:#141b25bd;display:flex;align-items:center;justify-content:center;color:#b6a185;font-family:Georgia,serif;font-size:14px}.compass:before{content:"";position:absolute;width:1px;height:37px;background:#405065;transform:rotate(90deg)}.compass:after{content:"";position:absolute;height:37px;width:1px;background:#405065}
+    .canvas-note{position:absolute;top:19px;left:20px;z-index:1;font-size:10px;color:#788697;background:#111821c7;border:1px solid #283644;border-radius:5px;padding:7px 10px;letter-spacing:.08em;text-transform:uppercase}
+    .map-tools{position:absolute;left:19px;bottom:19px;display:flex;gap:5px;z-index:1;background:#151c26db;border:1px solid #364252;border-radius:9px;padding:5px}.map-tools .btn{padding:8px;min-width:32px;background:transparent;border:0}.map-tools .btn:hover{background:#334050}
+    .map-footer{padding:11px 18px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:9px;font-size:11px;color:#8290a2;border-top:1px solid var(--line)}.map-footer strong{color:#b6c3d1;font-weight:600}
+    .info-panel{overflow:hidden;display:flex;flex-direction:column}.info-header{padding:19px 21px 17px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.info-label{color:#8e9aaa;font-weight:700;letter-spacing:.13em;text-transform:uppercase;font-size:10px}.info-body{padding:20px 21px 22px;overflow-y:auto;max-height:665px;min-height:470px}
+    .room-mark{width:44px;height:44px;border:1px solid #bd995c;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#352c20;color:#ecc58d;font-family:Georgia,serif;font-size:20px;margin-bottom:17px}
+    .room-name{font-family:Georgia,serif;font-size:26px;line-height:1.14;letter-spacing:-.025em}.room-type{font-size:11px;color:#a6b1bf;margin-top:8px}.room-status{font-size:10px;display:inline-block;color:#c9b28f;background:#2d2823;border:1px solid #625039;border-radius:6px;padding:4px 8px;margin-top:13px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+    .info-line{height:1px;background:var(--line);margin:23px 0 19px}.detail-heading{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#8d9bae;font-weight:800;margin-bottom:12px}.detail-text{font-size:12px;line-height:1.7;color:#bac5d1}.fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.fact-label{display:block;font-size:10px;color:#7d8da0;letter-spacing:.045em}.fact-value{display:block;font-size:12px;color:#dbe1e7;margin-top:4px;line-height:1.5;word-break:break-word}.tagrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.softtag{font-size:11px;color:#c2cbd5;border:1px solid #3b4555;background:#1f2732;border-radius:5px;padding:5px 8px}
+    .stack{display:flex;flex-direction:column;gap:10px}.subitem{padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:#19212b}.subitem strong{display:block;color:#d2d9e1;font-size:12px;font-weight:650}.subitem span{color:#8c99aa;font-size:11px;display:block;margin-top:3px;line-height:1.5}
+    .small-warning{font-size:11px;color:#caaf88;background:#30281f;border:1px solid #554633;border-radius:7px;padding:10px 11px;line-height:1.5;margin-top:16px}.empty-panel{font-size:13px;color:#98a6b7;line-height:1.65}.footerbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#677587;font-size:10px;padding:2px 1px}.footerbar strong{font-weight:600;color:#a2adbb}
+    .status-banner{display:none;border:1px solid #73503f;background:#2d221f;color:#e5c0a4;font-size:12px;padding:12px 15px;border-radius:8px}.status-banner.show{display:block}
+    .room-node{cursor:pointer;filter:drop-shadow(0 6px 14px rgba(0,0,0,.23));transition:filter .18s}.room-node:hover{filter:drop-shadow(0 8px 19px rgba(0,0,0,.38))}.room-node:focus-visible{outline:none}.room-node:focus-visible .outline{stroke:#f8dba1;stroke-width:4}
+    .room-node .outline{transition:stroke .15s,fill .15s}.room-node.selected .outline{stroke:#f2c27b;stroke-width:3}
+    .loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;letter-spacing:.03em;color:#aeb9c5;text-align:center;z-index:1}
+    @media(max-width:1250px){.workspace{grid-template-columns:minmax(0,1fr) 280px}.body{padding:24px;gap:18px}.sidebar{padding:27px 15px 20px}.app{grid-template-columns:222px minmax(0,1fr)}}
+    @media(max-width:1020px){.workspace{grid-template-columns:minmax(0,1fr)}.info-panel{min-height:0}.info-body{max-height:none;min-height:0}.stats{grid-template-columns:repeat(2,1fr)}.map-viewport,.map-svg{min-height:420px}}
+    @media(max-width:720px){.app{display:block}.sidebar{min-height:0;padding:17px 18px;border-right:0;border-bottom:1px solid var(--line)}.brandmark{display:none}.brand-title{font-size:21px}.brand-subtitle{margin-top:4px}.line-sep{margin:13px 0}.floor-list{flex-direction:row;overflow-x:auto;gap:7px}.floor-btn{min-width:160px;width:auto}.side-bottom{display:none}.nav-label{margin:0 1px 8px}.body{padding:18px 13px;gap:15px}.top-title{font-size:28px}.top-right{width:100%;justify-content:space-between}.map-head{padding:14px}.map-footer{font-size:10px}.map-viewport,.map-svg{min-height:390px}.stats{gap:8px}.stat{padding:12px;min-height:73px}.stat-value{font-size:21px}.compass{right:13px;top:13px}}
+    @media print{body{background:white;color:#1d2633}.app{display:block}.sidebar,.top-right,.map-tools,.compass{display:none!important}.body{padding:0}.workspace{display:block}.map-panel,.info-panel,.stat{box-shadow:none;break-inside:avoid;border:1px solid #888}.map-viewport{background:white}.map-svg{min-height:450px}.info-panel{margin-top:15px}.info-body{max-height:none;min-height:0}.map-footer,.footerbar,.detail-text{color:#444}.top-title,.room-name{color:#111}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-label="Dungeon navigation">
+    <div class="brandmark" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 2L23 13L13 24L3 13Z" stroke-width="1.5"/><path d="M13 7L19 13L13 19L7 13Z" stroke-width="1.4"/><circle cx="13" cy="13" r="2" fill="#cba36d" stroke="none"/></svg></div>
+    <div class="eyebrow">Calmaria / System</div>
+    <h1 class="brand-title">Dungeon Atlas</h1>
+    <div class="brand-subtitle">Rise of the Core</div>
+    <div class="line-sep"></div>
+    <div class="nav-label">Dungeon Floors</div>
+    <nav class="floor-list" id="floor-list" aria-label="Select dungeon floor"><span class="empty-panel">Loading floors…</span></nav>
+    <div class="side-bottom">
+      <div class="statusline"><span class="status-dot"></span><span id="side-sync">Reading map data</span></div>
+      <div class="side-small">Read-only dungeon layout.<br>Changes come from validated campaign saves.</div>
+    </div>
+  </aside>
+  <main class="body">
+    <header class="top">
+      <div><div class="eyebrow">Operational overview</div><h2 class="top-title" id="core-name">Dungeon Atlas</h2><p class="top-subtitle" id="core-region">Loading campaign…</p></div>
+      <div class="top-right"><span id="test-flag" class="pill hidden">TEST CAMPAIGN</span><button id="refresh-btn" class="btn" title="Fetch newest published map data"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9a7 7 0 0 1 12-2L20 12M4 12l2.4 5a7 7 0 0 0 12-2"/></svg>Refresh map</button><button class="btn ghost" id="print-btn" title="Print current dungeon map"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/></svg>Print</button></div>
+    </header>
+    <div id="status-banner" class="status-banner" role="status"></div>
+    <section class="stats" aria-label="Dungeon statistics">
+      <div class="stat"><div class="stat-label">Floors established</div><div class="stat-value" id="stat-floors">—</div></div>
+      <div class="stat"><div class="stat-label">Mapped rooms</div><div class="stat-value" id="stat-rooms">—</div></div>
+      <div class="stat"><div class="stat-label">Mana reserve</div><div class="stat-value" id="stat-mana">—</div></div>
+      <div class="stat"><div class="stat-label">Matter units</div><div class="stat-value" id="stat-matter">—</div></div>
+    </section>
+    <div class="workspace">
+      <section class="map-panel" aria-label="Interactive floor plan">
+        <div class="map-head"><div><div class="section-kicker" id="map-floor-label">Floor plan</div><div class="floor-title" id="map-floor-title">No floor selected</div><div class="floor-desc" id="map-floor-subtitle">Select a floor to explore its rooms</div></div><div class="map-head-right"><span id="map-room-count">—</span></div></div>
+        <div class="map-viewport"><div class="canvas-note">Interior schematic · not to scale</div><div class="compass" aria-hidden="true">N</div>
+          <svg id="map-svg" class="map-svg" viewBox="-480 -330 960 660" role="img" aria-label="Interactive schematic showing saved dungeon rooms. Click a room for details.">
+            <defs><pattern id="floor-grid" width="55" height="55" patternUnits="userSpaceOnUse"><path d="M 55 0 L 0 0 0 55" fill="none" stroke="#344254" stroke-width=".7" opacity=".38"/></pattern><pattern id="detail-grid" width="275" height="275" patternUnits="userSpaceOnUse"><path d="M275 0L0 0 0 275" fill="none" stroke="#536274" stroke-width="1" opacity=".21"/></pattern></defs>
+            <rect x="-10000" y="-10000" width="20000" height="20000" fill="url(#floor-grid)"/><rect x="-10000" y="-10000" width="20000" height="20000" fill="url(#detail-grid)"/>
+            <g id="links-layer"></g><g id="rooms-layer"></g>
+          </svg>
+          <div class="loading" id="loading-label">Reading the latest published dungeon map…</div>
+          <div class="map-tools" aria-label="Map controls"><button class="btn" id="zoom-in" aria-label="Zoom in" title="Zoom in"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button><button class="btn" id="zoom-out" aria-label="Zoom out" title="Zoom out"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button><button class="btn" id="zoom-fit" aria-label="Fit all rooms" title="Fit all rooms"><svg viewBox="0 0 24 24"><path d="M8 3H3v5M21 8V3h-5M3 16v5h5M16 21h5v-5"/></svg></button></div>
+        </div>
+        <div class="map-footer"><span id="layout-confidence"><strong>Planning schematic</strong> · room positions require validation</span><span>Drag to pan · scroll to zoom · select a room</span></div>
+      </section>
+      <aside class="info-panel" aria-label="Room and floor details"><div class="info-header"><div class="info-label">Room Inspector</div><div class="info-label" id="inspector-counter">—</div></div><div class="info-body" id="inspector-body"><p class="empty-panel">Select a room on the map to view its saved details.</p></div></aside>
+    </div>
+    <footer class="footerbar"><span id="save-ref">Waiting for verified save data</span><span>Map geometry is schematic · <strong>Campaign save remains authoritative</strong></span></footer>
+  </main>
+</div>
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const svg = $('map-svg');
+  const NS = 'http://www.w3.org/2000/svg';
+  const COLORS = {core:'#cba36d',research:'#aa96d5',workshop:'#86a7d0',foundry:'#c78470',mine:'#b29d82',storage:'#8fa4ba',barracks:'#d58a85',habitat:'#9cab88',defense:'#c78583',corridor:'#8c98ab',general:'#9dacc1'};
+  const state = {data:null,activeFloor:null,selectedRoom:null,view:{x:-480,y:-330,w:960,h:660},pointer:null,lastFetch:0,lastHash:null};
+  const SVG = (tag, attrs={}) => {const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs)){el.setAttribute(k,String(v));}return el;};
+  const el = (tag,className='',text='') => {const n=document.createElement(tag);if(className)n.className=className;if(text!==null)n.textContent=String(text);return n;};
+  const fmt = v => v===null || v===undefined || v==='' ? '—' : String(v);
+  const shortNum = v => {const n=Number(v);return Number.isFinite(n)?new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(n):fmt(v)};
+  const labelCase = s => String(s||'general').replace(/[_-]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  const roleSymbol = t => ({core:'C',research:'R',workshop:'W',foundry:'F',mine:'M',storage:'S',barracks:'B',habitat:'H',defense:'D',corridor:'↔',general:'•'})[t]||'•';
+  const roomRect = r => ({x:r.layout.x*110,y:r.layout.y*110,w:r.layout.width*110-16,h:r.layout.height*110-16});
+  const viewSet = v => {state.view=v;svg.setAttribute('viewBox',`${v.x} ${v.y} ${v.w} ${v.h}`)};
+  const textBlock = (parent,tag,cls,content) => {const n=el(tag,cls,content);parent.append(n);return n;};
+  const separate = parent => parent.append(el('div','info-line'));
+  const infoSection=(parent,title)=>textBlock(parent,'h3','detail-heading',title);
+  const warning = (parent,msg)=>textBlock(parent,'div','small-warning',msg);
+  function syncBanner(msg){const b=$('status-banner');b.textContent=msg;b.classList.toggle('show',Boolean(msg))}
+  function currentFloor(){return state.data?.floors.find(f=>f.id===state.activeFloor)||null}
+  function currentRoom(){return currentFloor()?.rooms.find(r=>r.id===state.selectedRoom)||null}
+  function head() {
+    const d=state.data,s=d.summary;
+    $('core-name').textContent=fmt(s.core_name);
+    $('core-region').textContent=[s.nation,s.nearest_settlement&&`near ${s.nearest_settlement}`,s.world_grid&&`Calmaria ${s.world_grid}`,s.core_level&&`Level ${s.core_level}`].filter(Boolean).join('  ·  ');
+    $('test-flag').classList.toggle('hidden',!s.is_test_only);
+    $('stat-floors').textContent=shortNum(s.floor_count);
+    $('stat-rooms').textContent=shortNum(s.room_count);
+    const mana=$('stat-mana');mana.replaceChildren(document.createTextNode(shortNum(s.mana_current)));
+    const cap=el('span','stat-sub','/ '+shortNum(s.mana_capacity));mana.append(cap);
+    $('stat-matter').textContent=shortNum(s.matter_mu);
+    $('save-ref').textContent=`Source: Save ${String(d.source.save_revision).padStart(4,'0')} · SHA-256 ${d.source.save_sha256.slice(0,12)}… · ${fmt(d.source.generated_at_utc)}`;
+    $('side-sync').textContent=`Published Save ${String(d.source.save_revision).padStart(4,'0')}`;
+  }
+  function floorNav(){const list=$('floor-list');list.replaceChildren();for(const f of state.data.floors){const btn=el('button','floor-btn');btn.type='button';btn.setAttribute('aria-current',String(f.id===state.activeFloor));const numeral=textBlock(btn,'span','floor-num',f.level===null?'?':String(f.level).padStart(2,'0'));numeral.setAttribute('aria-hidden','true');const meta=el('span','floor-meta');textBlock(meta,'strong','',f.name);textBlock(meta,'span','',`${f.rooms.length} ${f.rooms.length===1?'room':'rooms'}`);btn.append(meta);btn.addEventListener('click',()=>selectFloor(f.id));list.append(btn);}if(!state.data.floors.length)textBlock(list,'p','empty-panel','No dungeon floors established.');}
+  function fitView(){const f=currentFloor();if(!f || !f.rooms.length){viewSet({x:-480,y:-330,w:960,h:660});return;}const rs=f.rooms.map(roomRect);let minx=Math.min(...rs.map(r=>r.x)),maxx=Math.max(...rs.map(r=>r.x+r.w)),miny=Math.min(...rs.map(r=>r.y)),maxy=Math.max(...rs.map(r=>r.y+r.h));const margin=190;let w=Math.max(740,maxx-minx+margin*2),h=Math.max(510,maxy-miny+margin*2);const box=svg.getBoundingClientRect(),ratio=(box.width||900)/(box.height||600);if(w/h<ratio)w=h*ratio;else h=w/ratio;viewSet({x:(minx+maxx-w)/2,y:(miny+maxy-h)/2,w,h})}
+  function zoom(factor,anchor){const v=state.view;const a=anchor||{x:v.x+v.w/2,y:v.y+v.h/2};let nw=Math.max(150,Math.min(12000,v.w*factor));let nh=nw*v.h/v.w;viewSet({x:a.x-(a.x-v.x)*nw/v.w,y:a.y-(a.y-v.y)*nh/v.h,w:nw,h:nh})}
+  function svgPoint(evt){const box=svg.getBoundingClientRect(),v=state.view;return{x:v.x+(evt.clientX-box.left)/box.width*v.w,y:v.y+(evt.clientY-box.top)/box.height*v.h}}
+  function selectFloor(id){state.activeFloor=id;const f=currentFloor();state.selectedRoom=f?.rooms?.[0]?.id||null;floorNav();renderMap();fitView();inspector()}
+  function selectRoom(id){state.selectedRoom=id;renderMap();inspector()}
+  function addCenteredText(g,value,x,y,style={}){const t=SVG('text',{x,y,'text-anchor':'middle','dominant-baseline':'middle',fill:style.fill||'#e1e5e9','font-family':'Segoe UI, system-ui, sans-serif','font-size':style.size||16,'font-weight':style.weight||600,'pointer-events':'none', 'letter-spacing': style.spacing||'0'});t.textContent=String(value);g.append(t);return t}
+  function wrapLines(value,max=25){const words=String(value||'').split(' '),out=[],current=[];for(const w of words){if((current.join(' ').length+w.length+1)>max&&current.length){out.push(current.join(' '));current.length=0}current.push(w)}if(current.length)out.push(current.join(' '));return out.slice(0,3)}
+  function renderMap(){const f=currentFloor();$('links-layer').replaceChildren();$('rooms-layer').replaceChildren();$('loading-label').style.display=f&&f.rooms.length?'none':'block';$('loading-label').textContent=f?'No saved rooms on this floor':'No dungeon floor is available';if(!f){$('map-floor-title').textContent='No floor established';$('map-floor-subtitle').textContent='Build a dungeon floor during gameplay';$('map-room-count').textContent='0 rooms';return}
+    $('map-floor-label').textContent=`Level ${fmt(f.level)} · Floor plan`;
+    $('map-floor-title').textContent=f.name;
+    $('map-floor-subtitle').textContent=fmt(f.purpose);
+    $('map-room-count').textContent=`${f.rooms.length} ${f.rooms.length===1?'room':'rooms'}`;
+    const placeholders=f.rooms.filter(r=>r.layout.source==='viewer_placeholder').length;
+    $('layout-confidence').textContent=placeholders ? `${placeholders} illustrative room placement${placeholders===1?'':'s'} · not surveyed` : 'All rooms use saved schematic coordinates';
+    const lookup=new Map(f.rooms.map(x=>[x.id,x]));const done=new Set();
+    for(const room of f.rooms){for(const to of room.connections){const dest=lookup.get(to);if(!dest)continue;const k=[room.id,to].sort().join('::');if(done.has(k))continue;done.add(k);const a=roomRect(room),b=roomRect(dest);const x1=a.x+a.w/2,y1=a.y+a.h/2,x2=b.x+b.w/2,y2=b.y+b.h/2;$('links-layer').append(SVG('line',{x1,y1,x2,y2,stroke:'#bc9870','stroke-width':17,'stroke-linecap':'round',opacity:.27}));$('links-layer').append(SVG('line',{x1,y1,x2,y2,stroke:'#d3b388','stroke-width':2,'stroke-dasharray':'9 10',opacity:.92}));}}
+    for(const room of f.rooms){const r=roomRect(room);const color=COLORS[room.type]||COLORS.general;const g=SVG('g',{'class':`room-node ${room.id===state.selectedRoom?'selected':''}`,role:'button',tabindex:'0','aria-label':`${room.name}, ${labelCase(room.type)} room, ${room.status}`});
+      g.append(SVG('rect',{x:r.x,y:r.y,width:r.w,height:r.h,rx:15,'class':'outline',stroke:'#58677b','stroke-width':'1.8',fill:'#202a36'}));
+      g.append(SVG('rect',{x:r.x+8,y:r.y+8,width:8,height:Math.max(20,r.h-16),rx:4,fill:color,opacity:'.95'}));
+      g.append(SVG('rect',{x:r.x+22,y:r.y+18,width:r.w-39,height:r.h-36,rx:8,fill:'none',stroke:'#384659','stroke-width':'1'}));
+      if(room.layout.source==='viewer_placeholder'){g.append(SVG('rect',{x:r.x+14,y:r.y+14,width:r.w-28,height:r.h-28,rx:9,fill:'none',stroke:color,'stroke-width':1.5,'stroke-dasharray':'9 10',opacity:.35}));}
+      const cx=r.x+r.w/2;const cy=r.y+r.h/2;
+      g.append(SVG('circle',{cx,cy:cy-55,r:22,fill:color,opacity:.15}));addCenteredText(g,roleSymbol(room.type),cx,cy-54,{fill:color,size:20,weight:700});
+      const lines=wrapLines(room.name,27);const start=cy+3-(lines.length-1)*12;lines.forEach((l,i)=>addCenteredText(g,l,cx,start+i*25,{size:Math.min(22,Math.max(15,r.w/22)),weight:650}));
+      addCenteredText(g,labelCase(room.type).toUpperCase(),cx,cy+69,{fill:'#96a5b7',size:10,weight:700,spacing:'2'});
+      g.addEventListener('click',()=>selectRoom(room.id));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectRoom(room.id)}});$('rooms-layer').append(g);
+    }
+  }
+  function facts(parent,items){const grid=el('div','fact-grid');for(const [lab,val] of items){const d=el('div');textBlock(d,'span','fact-label',lab);textBlock(d,'span','fact-value',fmt(val));grid.append(d)}parent.append(grid)}
+  function stackItems(parent,items,render){const box=el('div','stack');for(const i of items){const n=el('div','subitem');textBlock(n,'strong','',fmt(i.name));textBlock(n,'span','',render(i));box.append(n)}parent.append(box)}
+  function inspector(){const f=currentFloor(),room=currentRoom(),b=$('inspector-body');b.replaceChildren();$('inspector-counter').textContent=f?.rooms?`${f.rooms.length} ROOMS`:'—';if(!f){textBlock(b,'p','empty-panel','This campaign has no established dungeon floors.');return}
+    if(room){const mark=textBlock(b,'div','room-mark',roleSymbol(room.type));mark.style.color=COLORS[room.type]||COLORS.general;
+      textBlock(b,'h3','room-name',room.name);textBlock(b,'p','room-type',`${labelCase(room.type)} · ${fmt(f.name)}`);textBlock(b,'span','room-status',room.status);
+      separate(b);infoSection(b,'Purpose & notes');textBlock(b,'p','detail-text',room.purpose||room.notes||'No additional room description is recorded.');if(room.purpose&&room.notes&&room.notes!==room.purpose){textBlock(b,'p','detail-text',room.notes).style.marginTop='8px'}
+      facts(b,[['Room ID',room.id],['Floor',f.level],['Connections',room.connections.length],['Geometry',room.layout.source==='viewer_placeholder'?'Illustrative':'Saved schematic']]);
+      if(room.connections.length){separate(b);infoSection(b,'Connected rooms');const tags=el('div','tagrow');for(const id of room.connections){const other=f.rooms.find(r=>r.id===id);const button=el('button','btn ghost',other?.name||id);button.addEventListener('click',()=>selectRoom(id));tags.append(button)}b.append(tags)}
+      if(room.layout.source==='viewer_placeholder')warning(b,'The room exists in the campaign save, but its physical layout was never specified. Its position and size are only a visual placeholder.');
+    }else{textBlock(b,'p','empty-panel','No rooms recorded on this floor yet. The map will fill in as rooms are constructed and saved.');}
+    if(f.unassigned_facilities.length){separate(b);infoSection(b,'Floor facilities');stackItems(b,f.unassigned_facilities,i=>[labelCase(i.status),i.outputs_per_day?.join(', ')].filter(Boolean).join(' · '));textBlock(b,'p','fact-label','Facility-to-room positions are not specified in the save.').style.marginTop='9px';}
+    if(f.floor_units.length){separate(b);infoSection(b,'Known floor occupants');stackItems(b,f.floor_units,i=>[labelCase(i.kind),labelCase(i.status),i.role].filter(Boolean).join(' · '));textBlock(b,'p','fact-label','Floor is known, precise room placement is not specified.').style.marginTop='9px'}
+    if(f.notes){separate(b);infoSection(b,'Floor record');textBlock(b,'p','detail-text',f.notes)}
+  }
+  async function refresh(isManual=false){if($('refresh-btn').disabled)return;$('refresh-btn').disabled=true;try{const response=await fetch(`./map-data.json?cache=${Date.now()}`,{cache:'no-store'});if(!response.ok)throw new Error(`HTTP ${response.status}`);const data=await response.json();if(data.document_type!=='riseofcore_dungeon_atlas_projection'||!Array.isArray(data.floors)||!data.source?.save_sha256)throw new Error('Invalid dungeon atlas file');if(!data.source.save_sha256.match(/^[a-f0-9]{64}$/))throw new Error('Invalid source checksum');const old=state.lastHash;state.data=data;state.lastHash=data.source.save_sha256;state.lastFetch=Date.now();const sameFloor=data.floors.some(f=>f.id===state.activeFloor);state.activeFloor=sameFloor?state.activeFloor:(data.floors[0]?.id||null);const f=currentFloor();state.selectedRoom=f?.rooms.find(x=>x.id===state.selectedRoom)?.id || f?.rooms?.[0]?.id || null;
+      head();floorNav();renderMap();if(!old||!sameFloor)fitView();inspector();syncBanner('');if(isManual && old===state.lastHash){$('side-sync').textContent='Already up to date';}else if(old && old!==state.lastHash){$('side-sync').textContent='New map revision loaded';}
+    }catch(err){$('loading-label').style.display='block';$('loading-label').textContent='Unable to load published map';syncBanner('Map data could not be retrieved. This site is read-only, and your campaign saves are unaffected. '+err.message);$('side-sync').textContent='Map data unavailable'}finally{$('refresh-btn').disabled=false}}
+  $('refresh-btn').addEventListener('click',()=>refresh(true));$('print-btn').addEventListener('click',()=>window.print());$('zoom-in').addEventListener('click',()=>zoom(.77));$('zoom-out').addEventListener('click',()=>zoom(1.3));$('zoom-fit').addEventListener('click',fitView);
+  svg.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY>0?1.12:.88,svgPoint(e))},{passive:false});
+  svg.addEventListener('pointerdown',e=>{if(e.button!==0 || e.target.closest?.('.room-node'))return;state.pointer={clientX:e.clientX,clientY:e.clientY,view:{...state.view}};svg.setPointerCapture(e.pointerId);svg.classList.add('dragging')});
+  svg.addEventListener('pointermove',e=>{if(!state.pointer)return;const box=svg.getBoundingClientRect(),p=state.pointer;viewSet({...p.view,x:p.view.x-(e.clientX-p.clientX)*p.view.w/box.width,y:p.view.y-(e.clientY-p.clientY)*p.view.h/box.height})});
+  function stopPointer(){state.pointer=null;svg.classList.remove('dragging')}svg.addEventListener('pointerup',stopPointer);svg.addEventListener('pointercancel',stopPointer);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden && Date.now()-state.lastFetch>60000)refresh(false)});
+  setInterval(()=>{if(!document.hidden && Date.now()-state.lastFetch>60000)refresh(false)},65000);
+  refresh();
+})();
+</script>
+</body>
+</html>

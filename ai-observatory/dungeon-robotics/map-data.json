@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "document_type": "riseofcore_dungeon_atlas_projection",
+  "authority": "PUBLIC DERIVED VIEW; exact game state is the validated Google Drive campaign save, not this file.",
+  "source": {
+    "campaign_id": "TEST_ONLY_TEST_CORE_20261107_01",
+    "campaign_title": "TEST_ONLY - Test Core - 2026-11-07",
+    "save_revision": 2,
+    "save_filename": "RiseOfCore_Campaign_Save_0002.json",
+    "save_sha256": "36f4e90db751056fc1c9a4bef8577ff70dbaeb3ad84624175e2eb1a2f25d8e48",
+    "ruleset_version": "1.3",
+    "generated_at_utc": "2026-11-07T19:28:54Z"
+  },
+  "summary": {
+    "core_name": "Test Core",
+    "core_level": 1,
+    "core_tier": "Normal",
+    "mana_current": "160",
+    "mana_capacity": "200",
+    "matter_mu": "85",
+    "world_grid": "F4",
+    "nearest_settlement": "Teri",
+    "nation": "Netefria",
+    "development_turn": 1,
+    "is_test_only": true,
+    "in_world_date": "1731 OE (exact day unspecified)",
+    "scene": "TEST_ONLY: Inside the survey alcove workshop beneath the disused station near Teri (F4). A decoded wall survey points toward an iron-bearing seam with a likely safe approach. The newly manufactured small scripted crawler Sparky stands beside Test Core, awaiting its first order.",
+    "floor_count": 1,
+    "room_count": 1,
+    "unit_count_named": 1
+  },
+  "floors": [
+    {
+      "id": "TEST_FLOOR_01",
+      "level": 1,
+      "name": "Survey Alcove",
+      "purpose": "Core sanctuary, workshop, and light testing",
+      "status": "existing_at_start",
+      "notes": "Pre-existing one floor, test-only origin grant. Maximum allowable floors = 5.",
+      "world_grid": "F4",
+      "rooms": [
+        {
+          "id": "TEST_ZONE_SURVEY_ALCOVE",
+          "name": "Survey Alcove",
+          "type": "core",
+          "type_source": "inferred_for_visualization",
+          "status": "operational",
+          "purpose": null,
+          "notes": "Core cradle, survey markings, materials bins, and simple workshop.",
+          "layout": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 3,
+            "source": "viewer_placeholder",
+            "notes": "This illustrative placement is not a surveyed or saved spatial fact."
+          },
+          "connections": [],
+          "facility_ids": [],
+          "unit_ids": []
+        }
+      ],
+      "unassigned_facilities": [
+        {
+          "id": "TEST_FAC_WORKSHOP_01",
+          "name": "Pre-installed simple workshop",
+          "status": "operational",
+          "outputs_per_day": [
+            "2 PS/day"
+          ],
+          "notes": "Explicit TEST_ONLY initial facility grant; normal new workshop costs 60 Mana and 40 MU. Operational energy and feedstock are assumed available for this single test; manufacture still uses actual 40 Mana/35 MU and one day."
+        }
+      ],
+      "floor_units": [
+        {
+          "id": "TEST_ASSET_SPARKY_0001",
+          "name": "Sparky",
+          "kind": "automaton",
+          "status": "active",
+          "role": "Scripted ground-level reconnaissance and simple visual inspection of rooms and corridors",
+          "notes": "Proven base Tier I Basic Survey Crawler, no modules or combat equipment; moves on ground, basic route following and inspection, returns observations on return to core range. Cost 40 Mana and 35 MU, one workshop production slot and one day. No production check for repeat."
+        }
+      ]
+    }
+  ]
+}
