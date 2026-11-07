@@ -6,7 +6,7 @@
   "eci": {
     "source": "Epoch AI",
     "url": "https://epoch.ai/eci",
-    "last_source_date": "2026-11-06",
+    "last_source_date": "2026-11-07",
     "method_update": "2026-11-04",
     "method_note": "Epoch ECI changed to a Bayesian fit on 2026-11-04, so older methodology estimates should not be stitched into a growth trend without adjusting for revisions.",
     "models": [
@@ -572,7 +572,7 @@
       }
     ],
     "history": [],
-    "last_successful_ingest": "2026-11-06T20:29:18Z",
+    "last_successful_ingest": "2026-11-07T18:56:23Z",
     "source_data_url": "https://epoch.ai/data/eci_scores.csv",
     "source_data_license": "Epoch AI CC BY; verify linked external benchmark licenses for reuse"
   },
@@ -641,7 +641,7 @@
       "name": "Epoch Capabilities Index",
       "category": "Capabilities",
       "url": "https://epoch.ai/eci",
-      "last_source_date": "2026-11-06",
+      "last_source_date": "2026-11-07",
       "cadence": "Publisher updates; automated collection planned",
       "mode": "daily official CSV"
     },
@@ -680,8 +680,8 @@
   ],
   "ingestion": {
     "status": "success",
-    "last_attempt": "2026-11-06T20:29:18Z",
-    "last_success": "2026-11-06T20:29:18Z",
+    "last_attempt": "2026-11-07T18:56:23Z",
+    "last_success": "2026-11-07T18:56:23Z",
     "notes": "Imported 251 valid ECI model rows and 0 release-dated observations from the linked CSV. Only the top 80 model comparisons are displayed."
   }
 }
