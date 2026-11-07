@@ -24,7 +24,8 @@
     .side-bottom{margin-top:auto;border-top:1px solid var(--line);padding:18px 6px 0}.statusline{display:flex;align-items:center;gap:8px;color:#a6b0bf;font-size:12px}.status-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;box-shadow:0 0 0 3px #443626}.side-small{margin-top:9px;color:#667588;font-size:11px;line-height:1.55}
     .body{min-width:0;display:flex;flex-direction:column;padding:28px 34px 27px;gap:23px}
     .top{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}.top-title{font-family:Georgia,serif;font-weight:500;font-size:32px;line-height:1.15;letter-spacing:-.025em}.top-subtitle{font-size:12px;color:var(--muted);margin-top:7px}
-    .top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pill{border:1px solid #5a4832;background:#2e261d;color:#e2bd88;font-size:10px;letter-spacing:.07em;font-weight:850;padding:7px 10px;border-radius:30px;text-transform:uppercase}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.campaign-picker{max-width:265px;min-width:145px;padding:9px 30px 9px 11px;background:#1c222d;color:#d5deeb;border:1px solid #364354;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer}.campaign-picker:focus-visible{outline:2px solid var(--gold);outline-offset:3px}.pill{border:1px solid #5a4832;background:#2e261d;color:#e2bd88;font-size:10px;letter-spacing:.07em;font-weight:850;padding:7px 10px;border-radius:30px;text-transform:uppercase}
     .pill.hidden{display:none}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:8px;color:#cbd5df;background:#1c222d;padding:9px 13px;font-size:12px;font-weight:650;transition:background .15s,transform .15s}.btn:hover{background:#293241}.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.ghost{background:transparent;border-color:#343e4d}
     .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.stat{background:var(--panel);border:1px solid var(--line-soft);border-radius:11px;padding:14px 17px;min-height:83px}.stat-label{font-size:10px;font-weight:750;text-transform:uppercase;letter-spacing:.1em;color:#8693a5}.stat-value{font-size:23px;letter-spacing:-.03em;font-weight:650;margin-top:5px;font-variant-numeric:tabular-nums}.stat-sub{font-size:10px;color:var(--muted);margin-left:4px;letter-spacing:0;font-weight:500}
     .workspace{display:grid;grid-template-columns:minmax(0,1fr) 304px;gap:16px;min-height:550px;flex:1}.map-panel,.info-panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);min-width:0;box-shadow:var(--shadow)}
@@ -86,7 +87,7 @@
   <main class="body">
     <header class="top">
       <div><div class="eyebrow">Operational overview</div><h2 class="top-title" id="core-name">Dungeon Atlas</h2><p class="top-subtitle" id="core-region">Loading campaign…</p></div>
-      <div class="top-right"><span id="test-flag" class="pill hidden">TEST CAMPAIGN</span><button id="refresh-btn" class="btn" title="Fetch newest published map data"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9a7 7 0 0 1 12-2L20 12M4 12l2.4 5a7 7 0 0 0 12-2"/></svg>Refresh map</button><button class="btn ghost" id="print-btn" title="Print current dungeon map"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/></svg>Print</button></div>
+      <div class="top-right"><label for="campaign-select" class="sr-only">Choose campaign</label><select id="campaign-select" class="campaign-picker" title="Choose campaign map"><option value="">Original public map</option></select><span id="test-flag" class="pill hidden">TEST CAMPAIGN</span><button id="refresh-btn" class="btn" title="Fetch newest published map data"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9a7 7 0 0 1 12-2L20 12M4 12l2.4 5a7 7 0 0 0 12-2"/></svg>Refresh map</button><button class="btn ghost" id="print-btn" title="Print current dungeon map"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/></svg>Print</button></div>
     </header>
     <div id="status-banner" class="status-banner" role="status"></div>
     <section class="stats" aria-label="Dungeon statistics">
@@ -127,6 +128,42 @@
   const FEET_PER_CELL = 5;
   const COLORS = {core:'#cba36d',research:'#aa96d5',workshop:'#86a7d0',foundry:'#c78470',mine:'#b29d82',storage:'#8fa4ba',barracks:'#d58a85',habitat:'#9cab88',defense:'#c78583',corridor:'#8c98ab',general:'#9dacc1'};
   const state = {data:null,activeFloor:null,selectedRoom:null,view:{x:-450,y:-300,w:900,h:600},pointer:null,lastFetch:0,lastHash:null};
+  const CAMPAIGN_ID_RE=/^[A-Za-z0-9_-]{8,100}$/;
+  const params=new URLSearchParams(window.location.search);
+  let activeCampaignId=params.get('campaign')||'';
+  const invalidCampaign=!!activeCampaignId&&!CAMPAIGN_ID_RE.test(activeCampaignId);
+  function mapURL(){return activeCampaignId ? `./campaigns/${encodeURIComponent(activeCampaignId)}.json`:'./map-data.json';}
+  function selectCampaign(id){
+    if(id && !CAMPAIGN_ID_RE.test(id))return;
+    activeCampaignId=id;const url=new URL(window.location.href);
+    if(id)url.searchParams.set('campaign',id);else url.searchParams.delete('campaign');
+    history.pushState({campaign:id},'',url);
+    state.activeFloor=null;state.selectedRoom=null;state.lastHash=null;
+    refresh(true);
+  }
+  async function loadCampaignList(){
+    const picker=$('campaign-select');
+    try{
+      const res=await fetch(`./campaigns/index.json?cache=${Date.now()}`,{cache:'no-store'});
+      if(!res.ok)throw new Error('No campaign index');
+      const registry=await res.json();
+      if(!Array.isArray(registry.campaigns))throw new Error('Bad index');
+      picker.replaceChildren();picker.append(new Option('Original public map',''));
+      const ids=new Set();
+      for(const entry of registry.campaigns){
+        const id=entry?.campaign_id;
+        if(typeof id!=='string'||!CAMPAIGN_ID_RE.test(id)||ids.has(id))continue;
+        ids.add(id);picker.append(new Option(String(entry.title||id).slice(0,80),id));
+      }
+      if(activeCampaignId&&!ids.has(activeCampaignId))picker.append(new Option(activeCampaignId+' (direct link)',activeCampaignId));
+      picker.value=activeCampaignId;
+    }catch(e){
+      picker.replaceChildren();picker.append(new Option('Original public map',''));
+      if(activeCampaignId)picker.append(new Option(activeCampaignId+' (direct link)',activeCampaignId));
+      picker.value=activeCampaignId;
+    }
+  }
+
   const SVG = (tag,attrs={}) => {const n=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));return n;};
   const el = (tag,cls='',content='') => {const n=document.createElement(tag);if(cls)n.className=cls;if(content!==null)n.textContent=String(content);return n;};
   const fmt = value => value===undefined||value===null||value===''?'—':String(value);
@@ -309,10 +346,12 @@
   async function refresh(isManual=false){
     if($('refresh-btn').disabled)return;$('refresh-btn').disabled=true;
     try{
-      const response=await fetch(`./map-data.json?cache=${Date.now()}`,{cache:'no-store'});
+      if(activeCampaignId && !CAMPAIGN_ID_RE.test(activeCampaignId))throw new Error('Invalid campaign URL. Only letters, digits, underscore and dash are allowed.');
+      const response=await fetch(`${mapURL()}?cache=${Date.now()}`,{cache:'no-store'});
       if(!response.ok)throw new Error(`HTTP ${response.status}`);
       const data=await response.json();
       if(data.document_type!=='riseofcore_dungeon_atlas_projection'||!Array.isArray(data.floors)||!data.source?.save_sha256||!/^([a-f0-9]{64})$/.test(data.source.save_sha256))throw new Error('Invalid or incomplete atlas projection');
+      if(activeCampaignId&&data.source.campaign_id!==activeCampaignId)throw new Error("Campaign identity mismatch. Refusing to show another campaign map.");
       // Legacy map projections are not reinterpreted as 5-foot geometry.
       const old=state.lastHash;state.data=data;state.lastHash=data.source.save_sha256;state.lastFetch=Date.now();
       const sameFloor=data.floors.some(f=>f.id===state.activeFloor);state.activeFloor=sameFloor?state.activeFloor:data.floors[0]?.id||null;
@@ -323,6 +362,8 @@
     }catch(err){$('loading-label').style.display='block';$('loading-label').textContent='Unable to load published map';syncBanner('Map data unavailable. Canonical Google Drive campaign saves are unaffected. '+err.message);$('side-sync').textContent='Map unavailable';}
     finally{$('refresh-btn').disabled=false;}
   }
+  $('campaign-select').addEventListener('change',()=>selectCampaign($('campaign-select').value));
+  window.addEventListener('popstate',()=>{activeCampaignId=new URLSearchParams(location.search).get('campaign')||'';$('campaign-select').value=activeCampaignId;state.activeFloor=null;state.selectedRoom=null;state.lastHash=null;refresh(true);});
   $('refresh-btn').addEventListener('click',()=>refresh(true));$('print-btn').addEventListener('click',()=>window.print());
   $('zoom-in').addEventListener('click',()=>zoom(.77));$('zoom-out').addEventListener('click',()=>zoom(1.3));$('zoom-fit').addEventListener('click',fitView);
   svg.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY>0?1.12:.88,svgPoint(e));},{passive:false});
@@ -332,6 +373,7 @@
   window.addEventListener('resize',updateRuler);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-state.lastFetch>60000)refresh(false);});
   setInterval(()=>{if(!document.hidden&&Date.now()-state.lastFetch>60000)refresh(false);},65000);
+  loadCampaignList();
   refresh();
 })();
 

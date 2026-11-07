@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "document_type": "riseofcore_campaign_map_index",
+  "campaigns": [
+    {
+      "campaign_id": "TEST_ONLY_TEST_CORE_20261107_01",
+      "title": "TEST_ONLY - Test Core - 2026-11-07",
+      "save_revision": 3,
+      "save_sha256": "37e810c1037f89d47628f56e688a3a46be3d26156219d289b1f6719c242c0362",
+      "is_test_only": true,
+      "map_path": "campaigns/TEST_ONLY_TEST_CORE_20261107_01.json"
+    }
+  ]
+}
