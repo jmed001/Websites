@@ -6,573 +6,573 @@
   "eci": {
     "source": "Epoch AI",
     "url": "https://epoch.ai/eci",
-    "last_source_date": "2026-11-26",
+    "last_source_date": "2026-11-27",
     "method_update": "2026-11-04",
     "method_note": "Epoch ECI changed to a Bayesian fit on 2026-11-04, so older methodology estimates should not be stitched into a growth trend without adjusting for revisions.",
     "models": [
       {
         "model": "Claude Fable 5.2",
         "lab": "Anthropic",
-        "score": 173.4,
-        "low": 170.04,
-        "high": 177.22
+        "score": 173.16,
+        "low": 169.73,
+        "high": 176.88
+      },
+      {
+        "model": "Gemini 4 Neon",
+        "lab": "Google DeepMind",
+        "score": 171.79,
+        "low": 168.42,
+        "high": 175.65
       },
       {
         "model": "GPT-6.2 Astra",
         "lab": "OpenAI",
-        "score": 172.82,
-        "low": 169.37,
-        "high": 176.94
+        "score": 171.64,
+        "low": 168.26,
+        "high": 175.45
       },
       {
         "model": "Gemini 4 Carbon",
         "lab": "Google DeepMind",
-        "score": 169.68,
-        "low": 166.58,
-        "high": 173.14
+        "score": 169.1,
+        "low": 166.14,
+        "high": 172.48
       },
       {
         "model": "GPT-6 Astra",
         "lab": "OpenAI",
-        "score": 169.21,
-        "low": 166.41,
-        "high": 172.49
+        "score": 169.09,
+        "low": 166.22,
+        "high": 172.36
       },
       {
         "model": "Claude Opus 5.5",
         "lab": "Anthropic",
-        "score": 168.67,
-        "low": 165.92,
-        "high": 171.96
+        "score": 168.51,
+        "low": 165.72,
+        "high": 171.64
       },
       {
         "model": "GPT-6.1 Sol",
         "lab": "OpenAI",
-        "score": 168.61,
-        "low": 165.69,
-        "high": 171.91
+        "score": 168.49,
+        "low": 165.62,
+        "high": 171.66
       },
       {
         "model": "GPT-6.1 Terra",
         "lab": "OpenAI",
-        "score": 167.71,
-        "low": 164.86,
-        "high": 171.04
+        "score": 167.35,
+        "low": 164.52,
+        "high": 170.48
       },
       {
         "model": "Claude Fable 5.1",
         "lab": "Anthropic",
-        "score": 167.06,
-        "low": 164.41,
-        "high": 170.13
+        "score": 166.94,
+        "low": 164.28,
+        "high": 169.86
       },
       {
         "model": "Gemini 4 Hydrogen",
         "lab": "Google DeepMind",
-        "score": 166.81,
-        "low": 163.99,
-        "high": 170.1
-      },
-      {
-        "model": "Claude Sonnet 5.5",
-        "lab": "Anthropic",
-        "score": 166.6,
-        "low": 163.92,
-        "high": 169.61
+        "score": 166.53,
+        "low": 163.74,
+        "high": 169.59
       },
       {
         "model": "Gemini 4 Argon",
         "lab": "Google DeepMind",
-        "score": 166.53,
-        "low": 163.94,
-        "high": 169.47
+        "score": 166.52,
+        "low": 163.83,
+        "high": 169.5
+      },
+      {
+        "model": "Claude Sonnet 5.5",
+        "lab": "Anthropic",
+        "score": 166.43,
+        "low": 163.8,
+        "high": 169.41
       },
       {
         "model": "Claude Opus 5",
         "lab": "Anthropic",
-        "score": 164.72,
-        "low": 162.27,
-        "high": 167.48
+        "score": 164.63,
+        "low": 162.16,
+        "high": 167.33
       },
       {
         "model": "Claude Fable 5",
         "lab": "Anthropic",
-        "score": 164.18,
-        "low": 161.82,
-        "high": 166.91
+        "score": 164.12,
+        "low": 161.77,
+        "high": 166.72
       },
       {
         "model": "GPT-6 Sol",
         "lab": "OpenAI",
-        "score": 163.83,
-        "low": 161.39,
-        "high": 166.55
+        "score": 163.69,
+        "low": 161.3,
+        "high": 166.27
       },
       {
         "model": "GPT-5.6 Sol",
         "lab": "OpenAI",
-        "score": 163.02,
-        "low": 160.72,
-        "high": 165.58
+        "score": 162.97,
+        "low": 160.66,
+        "high": 165.54
       },
       {
         "model": "GPT-5.5 Pro",
         "lab": "OpenAI",
         "score": 162.78,
-        "low": 160.07,
-        "high": 165.88
+        "low": 160.16,
+        "high": 165.71
+      },
+      {
+        "model": "GPT-6.2 Sol",
+        "lab": "OpenAI",
+        "score": 162.63,
+        "low": 159.55,
+        "high": 165.99
       },
       {
         "model": "Muse Wonder",
         "lab": "Meta AI",
-        "score": 161.74,
-        "low": 159.37,
-        "high": 164.29
+        "score": 161.84,
+        "low": 159.56,
+        "high": 164.37
       },
       {
         "model": "Kimi K3.1 Pro",
         "lab": "Moonshot",
-        "score": 161.2,
-        "low": 158.95,
-        "high": 163.74
+        "score": 161.11,
+        "low": 158.88,
+        "high": 163.52
       },
       {
         "model": "GPT-5.6 Terra",
         "lab": "OpenAI",
-        "score": 160.8,
-        "low": 158.49,
-        "high": 163.29
-      },
-      {
-        "model": "Claude Haiku 5.5",
-        "lab": "Anthropic",
-        "score": 160.33,
-        "low": 158.18,
-        "high": 162.69
+        "score": 160.74,
+        "low": 158.57,
+        "high": 163.15
       },
       {
         "model": "GPT-5.4 Pro",
         "lab": "OpenAI",
-        "score": 160.31,
-        "low": 157.93,
-        "high": 163.02
+        "score": 160.3,
+        "low": 157.95,
+        "high": 162.91
+      },
+      {
+        "model": "Claude Haiku 5.5",
+        "lab": "Anthropic",
+        "score": 160.19,
+        "low": 158.11,
+        "high": 162.53
       },
       {
         "model": "GPT-5.5",
         "lab": "OpenAI",
         "score": 160.19,
-        "low": 158.19,
-        "high": 162.43
+        "low": 158.17,
+        "high": 162.41
+      },
+      {
+        "model": "Qwen4-Max",
+        "lab": "Alibaba",
+        "score": 159.97,
+        "low": 157.73,
+        "high": 162.44
       },
       {
         "model": "Claude Opus 4.8",
         "lab": "Anthropic",
-        "score": 159.9,
+        "score": 159.87,
         "low": 157.83,
-        "high": 162.21
+        "high": 162.1
       },
       {
         "model": "DeepSeek V4.1 Flash 1017",
         "lab": "DeepSeek",
-        "score": 159.41,
-        "low": 157.13,
-        "high": 161.91
+        "score": 159.39,
+        "low": 157.16,
+        "high": 161.82
       },
       {
         "model": "Gemini 3.8 Flash",
         "lab": "Google DeepMind",
-        "score": 158.81,
-        "low": 156.82,
-        "high": 161.01
+        "score": 158.8,
+        "low": 156.85,
+        "high": 160.97
+      },
+      {
+        "model": "Muse Ember",
+        "lab": "Meta AI",
+        "score": 158.7,
+        "low": 156.01,
+        "high": 161.48
       },
       {
         "model": "Kimi K3",
         "lab": "Moonshot",
-        "score": 158.61,
-        "low": 156.66,
-        "high": 160.8
+        "score": 158.55,
+        "low": 156.6,
+        "high": 160.68
       },
       {
         "model": "Gemini 3.7 Flash",
         "lab": "Google DeepMind",
-        "score": 158.4,
-        "low": 156.47,
-        "high": 160.58
+        "score": 158.39,
+        "low": 156.42,
+        "high": 160.51
       },
       {
         "model": "Muse Spark 1.3",
         "lab": "Meta AI",
-        "score": 158.24,
-        "low": 156.16,
-        "high": 160.48
+        "score": 158.2,
+        "low": 156.11,
+        "high": 160.47
       },
       {
         "model": "GPT-5.4",
         "lab": "OpenAI",
-        "score": 157.89,
-        "low": 156.04,
-        "high": 159.97
+        "score": 157.88,
+        "low": 156.03,
+        "high": 159.96
       },
       {
         "model": "Grok 4.6",
         "lab": "xAI",
-        "score": 157.82,
-        "low": 155.9,
-        "high": 159.99
+        "score": 157.75,
+        "low": 155.81,
+        "high": 159.82
       },
       {
         "model": "Qwen 3.8 Max",
         "lab": "Alibaba",
         "score": 157.55,
-        "low": 155.52,
-        "high": 159.85
+        "low": 155.51,
+        "high": 159.78
       },
       {
         "model": "Claude Opus 4.7",
         "lab": "Anthropic",
-        "score": 157.49,
-        "low": 155.63,
-        "high": 159.56
+        "score": 157.48,
+        "low": 155.65,
+        "high": 159.46
       },
       {
         "model": "GPT-5.2 Pro",
         "lab": "OpenAI",
-        "score": 157.35,
-        "low": 155.06,
-        "high": 159.95
+        "score": 157.36,
+        "low": 155.12,
+        "high": 159.9
       },
       {
         "model": "GLM-5.3",
         "lab": "Z.ai (Zhipu AI)",
-        "score": 157.1,
-        "low": 155.01,
-        "high": 159.42
+        "score": 157.03,
+        "low": 154.95,
+        "high": 159.3
       },
       {
         "model": "DeepSeek V4.1 Flash",
         "lab": "DeepSeek",
-        "score": 157.01,
+        "score": 156.98,
         "low": 155.05,
-        "high": 159.2
+        "high": 159.13
       },
       {
         "model": "Claude Sonnet 5",
         "lab": "Anthropic",
-        "score": 156.9,
-        "low": 154.92,
-        "high": 159.06
+        "score": 156.87,
+        "low": 154.82,
+        "high": 159.04
       },
       {
         "model": "GPT-5.6 Luna",
         "lab": "OpenAI",
-        "score": 156.72,
-        "low": 154.87,
-        "high": 158.77
+        "score": 156.73,
+        "low": 154.86,
+        "high": 158.69
       },
       {
         "model": "GPT-6 Luna",
         "lab": "OpenAI",
-        "score": 156.45,
-        "low": 154.58,
-        "high": 158.48
+        "score": 156.4,
+        "low": 154.56,
+        "high": 158.35
       },
       {
         "model": "Grok 4.7",
         "lab": "xAI",
-        "score": 156.43,
-        "low": 154.51,
-        "high": 158.52
+        "score": 156.38,
+        "low": 154.49,
+        "high": 158.39
       },
       {
         "model": "Claude Opus 4.6",
         "lab": "Anthropic",
-        "score": 156.33,
-        "low": 154.61,
-        "high": 158.27
+        "score": 156.34,
+        "low": 154.63,
+        "high": 158.19
       },
       {
         "model": "Gemini 3.1 Pro",
         "lab": "Google DeepMind",
-        "score": 156.25,
+        "score": 156.26,
         "low": 154.53,
-        "high": 158.16
-      },
-      {
-        "model": "Qwen3.8 Max (0902)",
-        "lab": "Alibaba",
-        "score": 155.99,
-        "low": 153.89,
-        "high": 158.32
+        "high": 158.13
       },
       {
         "model": "DeepSeek V4 Pro 0813",
         "lab": "DeepSeek",
-        "score": 155.96,
-        "low": 154.05,
-        "high": 158.06
+        "score": 155.98,
+        "low": 154.1,
+        "high": 158.0
+      },
+      {
+        "model": "Qwen3.8 Max (0902)",
+        "lab": "Alibaba",
+        "score": 155.95,
+        "low": 153.86,
+        "high": 158.15
       },
       {
         "model": "Muse Spark Open",
         "lab": "Meta AI",
         "score": 155.47,
-        "low": 153.34,
-        "high": 157.75
+        "low": 153.42,
+        "high": 157.63
       },
       {
         "model": "Gemini 3.5 Flash",
         "lab": "Google DeepMind",
-        "score": 155.34,
-        "low": 153.52,
-        "high": 157.31
+        "score": 155.45,
+        "low": 153.67,
+        "high": 157.34
       },
       {
         "model": "Gemini 3.6 Flash",
         "lab": "Google DeepMind",
-        "score": 155.24,
+        "score": 155.25,
         "low": 153.42,
-        "high": 157.26
-      },
-      {
-        "model": "Muse Spark 1.2",
-        "lab": "Meta AI",
-        "score": 155.02,
-        "low": 152.68,
-        "high": 157.54
+        "high": 157.23
       },
       {
         "model": "Grok 4.5",
         "lab": "xAI",
-        "score": 154.98,
-        "low": 153.13,
-        "high": 156.87
+        "score": 154.97,
+        "low": 153.21,
+        "high": 156.86
+      },
+      {
+        "model": "Muse Spark 1.2",
+        "lab": "Meta AI",
+        "score": 154.97,
+        "low": 152.71,
+        "high": 157.33
       },
       {
         "model": "Muse Spark 1.1",
         "lab": "Meta AI",
-        "score": 154.94,
-        "low": 152.38,
-        "high": 157.72
-      },
-      {
-        "model": "Mistral Large 4",
-        "lab": "Mistral AI",
-        "score": 154.57,
-        "low": 151.81,
-        "high": 157.43
+        "score": 154.86,
+        "low": 152.26,
+        "high": 157.6
       },
       {
         "model": "Qwen3.7-Max",
         "lab": "Alibaba",
-        "score": 154.57,
-        "low": 152.61,
-        "high": 156.75
+        "score": 154.64,
+        "low": 152.69,
+        "high": 156.72
+      },
+      {
+        "model": "Mistral Large 4",
+        "lab": "Mistral AI",
+        "score": 154.6,
+        "low": 151.88,
+        "high": 157.42
       },
       {
         "model": "GPT-5.2",
         "lab": "OpenAI",
-        "score": 154.53,
-        "low": 152.9,
-        "high": 156.3
+        "score": 154.52,
+        "low": 152.91,
+        "high": 156.19
       },
       {
         "model": "DeepSeek V4 Flash 0731",
         "lab": "DeepSeek",
-        "score": 154.43,
-        "low": 152.61,
-        "high": 156.4
+        "score": 154.45,
+        "low": 152.54,
+        "high": 156.51
       },
       {
         "model": "GLM-5.3-Flash",
         "lab": "Z.ai (Zhipu AI)",
-        "score": 153.77,
-        "low": 151.95,
-        "high": 155.78
+        "score": 153.76,
+        "low": 152.01,
+        "high": 155.6
       },
       {
         "model": "Muse Spark",
         "lab": "Meta AI",
-        "score": 153.15,
-        "low": 150.95,
-        "high": 155.46
+        "score": 153.16,
+        "low": 150.96,
+        "high": 155.42
       },
       {
         "model": "GLM-5.2",
         "lab": "Z.ai (Zhipu AI)",
-        "score": 153.07,
-        "low": 151.34,
-        "high": 154.91
+        "score": 153.05,
+        "low": 151.4,
+        "high": 154.83
       },
       {
         "model": "Gemini 3 Pro",
         "lab": "Google DeepMind",
-        "score": 153.04,
-        "low": 151.47,
-        "high": 154.75
+        "score": 153.03,
+        "low": 151.46,
+        "high": 154.65
+      },
+      {
+        "model": "Inkling 2 Mini",
+        "lab": "Thinking Machines",
+        "score": 153.0,
+        "low": 150.78,
+        "high": 155.32
       },
       {
         "model": "Claude Sonnet 4.6",
         "lab": "Anthropic",
-        "score": 152.85,
-        "low": 151.24,
-        "high": 154.53
+        "score": 152.88,
+        "low": 151.22,
+        "high": 154.65
       },
       {
         "model": "Mistral Large 4 Preview",
         "lab": "Mistral AI",
-        "score": 152.74,
-        "low": 150.84,
-        "high": 154.68
+        "score": 152.78,
+        "low": 150.93,
+        "high": 154.73
       },
       {
         "model": "Qwen 3.8 27B",
         "lab": "Alibaba",
-        "score": 152.63,
-        "low": 150.65,
-        "high": 154.67
+        "score": 152.69,
+        "low": 150.72,
+        "high": 154.76
       },
       {
         "model": "Gemini 3 Flash",
         "lab": "Google DeepMind",
-        "score": 152.35,
-        "low": 150.75,
-        "high": 154.06
+        "score": 152.37,
+        "low": 150.8,
+        "high": 153.95
       },
       {
         "model": "Grok 4.20",
         "lab": "xAI",
-        "score": 152.26,
-        "low": 150.53,
-        "high": 154.12
+        "score": 152.34,
+        "low": 150.64,
+        "high": 154.09
       },
       {
         "model": "Claude Opus 4.5",
         "lab": "Anthropic",
-        "score": 151.87,
-        "low": 150.35,
-        "high": 153.45
+        "score": 151.84,
+        "low": 150.36,
+        "high": 153.38
       },
       {
         "model": "Kimi K2.6",
         "lab": "Moonshot",
-        "score": 151.6,
-        "low": 149.87,
-        "high": 153.43
+        "score": 151.74,
+        "low": 150.01,
+        "high": 153.54
       },
       {
         "model": "GPT-5 Pro",
         "lab": "OpenAI",
-        "score": 151.3,
-        "low": 149.36,
-        "high": 153.35
+        "score": 151.29,
+        "low": 149.38,
+        "high": 153.29
       },
       {
         "model": "Kimi K2.7 Code",
         "lab": "Moonshot",
-        "score": 151.17,
-        "low": 149.18,
-        "high": 153.25
+        "score": 151.13,
+        "low": 149.19,
+        "high": 153.15
       },
       {
         "model": "GPT-5.1",
         "lab": "OpenAI",
-        "score": 150.93,
-        "low": 149.35,
-        "high": 152.57
+        "score": 150.96,
+        "low": 149.44,
+        "high": 152.62
       },
       {
         "model": "Beam 1.0",
         "lab": "Reflection",
-        "score": 150.84,
-        "low": 148.56,
-        "high": 153.14
+        "score": 150.85,
+        "low": 148.67,
+        "high": 153.06
       },
       {
         "model": "Inkling-Small",
         "lab": "Thinking Machines",
-        "score": 150.77,
-        "low": 149.02,
-        "high": 152.54
+        "score": 150.84,
+        "low": 149.13,
+        "high": 152.61
       },
       {
         "model": "GLM-5.1",
         "lab": "Z.ai (Zhipu AI)",
         "score": 150.71,
-        "low": 148.66,
-        "high": 152.82
+        "low": 148.73,
+        "high": 152.7
       },
       {
         "model": "DeepSeek-V4-Pro",
         "lab": "DeepSeek",
-        "score": 150.19,
-        "low": 148.42,
-        "high": 151.99
+        "score": 150.22,
+        "low": 148.59,
+        "high": 151.96
       },
       {
         "model": "Grok 4.3 Beta",
         "lab": "xAI",
-        "score": 149.92,
-        "low": 147.98,
-        "high": 151.86
+        "score": 149.95,
+        "low": 148.08,
+        "high": 151.9
       },
       {
         "model": "Qwen 3.6 Max (Preview)",
         "lab": "Alibaba",
-        "score": 149.86,
-        "low": 147.92,
-        "high": 151.88
+        "score": 149.88,
+        "low": 147.86,
+        "high": 151.99
       },
       {
         "model": "GPT-5.4 Mini",
         "lab": "OpenAI",
-        "score": 149.37,
-        "low": 147.71,
-        "high": 151.13
+        "score": 149.38,
+        "low": 147.75,
+        "high": 151.03
       },
       {
         "model": "Qwen 3.6 Plus",
         "lab": "Alibaba",
-        "score": 148.87,
-        "low": 146.85,
-        "high": 150.91
-      },
-      {
-        "model": "Kimi K2.5",
-        "lab": "Moonshot",
-        "score": 148.79,
-        "low": 147.29,
-        "high": 150.33
-      },
-      {
-        "model": "Inkling",
-        "lab": "Thinking Machines",
-        "score": 148.39,
-        "low": 146.76,
-        "high": 150.08
-      },
-      {
-        "model": "Qwen3.5 397B-A17B",
-        "lab": "Alibaba",
-        "score": 147.96,
-        "low": 145.86,
-        "high": 150.13
-      },
-      {
-        "model": "Qwen3.7-Plus",
-        "lab": "Alibaba",
-        "score": 147.92,
-        "low": 145.96,
-        "high": 150.02
-      },
-      {
-        "model": "MiniMax-M3",
-        "lab": "MiniMax",
-        "score": 147.84,
-        "low": 145.68,
-        "high": 149.96
+        "score": 148.88,
+        "low": 146.86,
+        "high": 150.89
       }
     ],
     "history": [],
-    "last_successful_ingest": "2026-11-26T23:07:58Z",
+    "last_successful_ingest": "2026-11-27T22:48:23Z",
     "source_data_url": "https://epoch.ai/data/eci_scores.csv",
     "source_data_license": "Epoch AI CC BY; verify linked external benchmark licenses for reuse"
   },
@@ -641,7 +641,7 @@
       "name": "Epoch Capabilities Index",
       "category": "Capabilities",
       "url": "https://epoch.ai/eci",
-      "last_source_date": "2026-11-26",
+      "last_source_date": "2026-11-27",
       "cadence": "Publisher updates; automated collection planned",
       "mode": "daily official CSV"
     },
@@ -680,8 +680,8 @@
   ],
   "ingestion": {
     "status": "success",
-    "last_attempt": "2026-11-26T23:07:58Z",
-    "last_success": "2026-11-26T23:07:58Z",
-    "notes": "Imported 256 valid ECI model rows and 0 release-dated observations from the linked CSV. Only the top 80 model comparisons are displayed."
+    "last_attempt": "2026-11-27T22:48:22Z",
+    "last_success": "2026-11-27T22:48:23Z",
+    "notes": "Imported 261 valid ECI model rows and 0 release-dated observations from the linked CSV. Only the top 80 model comparisons are displayed."
   }
 }
